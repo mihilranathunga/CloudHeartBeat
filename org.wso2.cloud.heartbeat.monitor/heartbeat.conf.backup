@@ -1,0 +1,209 @@
+# Copyright 2005-2013 WSO2, Inc. http://www.wso2.org
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+ ###########################################################
+ #  Configuration details of WSO2 Cloud Heartbeat monitor  #
+ ###########################################################
+
+#cron_trigger: specify a valid cron expression.
+#simple_trigger: specify a time interval in hours (h) or in minutes (m).
+#please specify only one trigger type. comment out the other one
+
+#deployment_wait_time: configure this according to your network latency. should be in seconds (s)
+
+#provide http_port if you are using this against a local setup. otherwise leave as it is.
+
+#This is the heartbeat tenant. create it and please specify valid credentials.
+heartbeat_tenant {
+    tenant_user         admin@heartbeat-monitor.com;
+    tenant_user_pwd     admin123;
+    #don't use "@" or ";" characters in the password
+
+    tenant_login_test{
+            #cron_trigger            ;
+            simple_trigger           60 m;
+    }
+}
+
+data_source {
+    host_name           localhost;
+    database_name       cloud_heartbeat;
+    user                root;
+    password            root;
+
+    #specify the time interval that the data should be in the database, should be in days (d).
+    #minimum value (default) is one month :35 d.
+    flush_before        35 d;
+}
+
+notification {
+    email {
+        #email alerts enable (true/false)
+        alerts          true;
+        #smtp auth enabled/disabled. if enabled user_name and password
+        auth            enabled;
+
+        mail_user       USERNAME;
+        mail_user_pwd   PASSWORD;
+        smtp_server     panthro.wso2.org;
+        smtp_port       25;
+        from_address    cloudpreview-heartbeat@wso2.com;
+
+        #multiple 'to' addresses should be separated by a comma
+        to_addresses    sumedhas@wso2.com;
+
+        #specify the digest mail frequency in hours (h)
+        digest_mail_interval     24 h;
+    }
+
+    sms_http {
+        #sms alerts supported clickatell or bulksms using http protocol. enable (true/false)
+        alerts          false;
+
+        #specify the bulk sms provider (clickatell/bulksms)
+        provider        clickatell;
+        http            http://api.clickatell.com/http/sendmsg;
+
+        #if its clickatell, provide the api_id; bulksms leave it as it is
+        api_id          3087090;
+        user            deep;
+        password        akrv17;
+
+        #multiple numbers should be separated by a comma
+        recipients      +94773037349;
+    }
+}
+
+#tests for each cloud service. comment out unnecessary services.
+modules {
+
+    appfactory{
+         host_name                    appfactory.cloudpreview.wso2.com;
+    }
+
+    #this is a App Server containing both cloudmgt app and issue tracker
+    cloud_management{
+         host_name                    cloudmgt.cloudpreview.wso2.com;
+    }
+
+    identity_server{
+         host_name                    identity.cloudpreview.wso2.com;
+    }
+
+    business_process_server {
+         host_name                    process.cloudpreview.wso2.com:9444;
+    }
+
+    storage_server{
+         host_name                    10.181.141.208:9443;
+    }
+
+    ues_server{
+        host_name                     dashboards.cloudpreview.wso2.com;
+    }
+
+    gitblit{
+        host_name                    git.cloudpreview.wso2.com;
+    }
+
+    jenkins{
+        host_name                    jenkins.cloudpreview.wso2.com;
+    }
+
+    business_activity_monitor{
+        host_name                    monitor.cloudpreview.wso2.com;
+        admin_username               admin;
+        admin_password               pass;
+    }
+
+
+    s2_gitblit{
+        host_name                    s2git.cloudpreview.wso2.com;
+        admin_username               admin;
+        admin_password               admin;
+    }
+
+#    cloud_controller{
+#        host_name                     cc.cloudpreview.wso2.com:9443;
+#    }
+
+## Stratos Controllers (Development, Test, Production)
+    stratos_controller_dev{
+         host_name                    sc.dev.cloudpreview.wso2.com:9445;
+    }
+    stratos_controller_test{
+         host_name                    sc.test.cloudpreview.wso2.com:9445;
+    }
+    stratos_controller_prod{
+         host_name                    sc.prod.cloudpreview.wso2.com:9445;
+    }
+
+## Application Servers (Development, Test, Production)
+    application_server_dev {
+        host_name                     appserver.dev.cloudpreview.wso2.com;
+    }
+    application_server_test {
+        host_name                     appserver.test.cloudpreview.wso2.com;
+    }
+    application_server_prod {
+        host_name                     appserver.cloudpreview.wso2.com;
+    }
+
+## BPS servers (Development, Test, Production)
+#    business_process_server_dev {
+#        host_name                     process.dev.cloudpreview.wso2.com;
+#    }
+#    business_process_server_test {
+#        host_name                     process.test.cloudpreview.wso2.com;
+#    }
+#    business_process_server_prod {
+#        host_name                     process.prod.cloudpreview.wso2.com;
+#    }
+
+## ESB servers (Development, Test, Production)
+#    enterprise_service_bus_dev {
+#        host_name                     esb.dev.cloudpreview.wso2.com;
+#    }
+#    enterprise_service_bus_test {
+#        host_name                     esb.test.cloudpreview.wso2.com;
+#    }
+#    enterprise_service_bus_prod {
+#        host_name                     esb.cloudpreview.wso2.com;
+#    }
+
+    api_manager {
+        host_name                     apimanager.cloudpreview.wso2.com;
+    }
+
+
+#####################################################################
+############################ API CLOUD ##############################
+
+    api_gateway {
+        host_name                     gateway.apicloud.cloudpreview.wso2.com;
+    }
+
+    api_store {
+        host_name                     store.apicloud.cloudpreview.wso2.com;
+    }
+
+    api_publisher {
+        host_name                     publisher.apicloud.cloudpreview.wso2.com;
+    }
+
+    api_key_manager {
+        host_name                     keymanager.apicloud.cloudpreview.wso2.com;
+    }
+
+}
