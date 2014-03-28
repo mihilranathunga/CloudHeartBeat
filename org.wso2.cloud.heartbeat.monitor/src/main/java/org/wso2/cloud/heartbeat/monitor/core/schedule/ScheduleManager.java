@@ -26,6 +26,7 @@ import org.wso2.cloud.heartbeat.monitor.core.configuration.parser.nginx.NodeBuil
 import org.wso2.cloud.heartbeat.monitor.core.schedule.utils.UtilJobScheduler;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ApplicationBuildTest;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ImportMemberToTenantTest;
+import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.CloudLoginTest;
 import org.wso2.cloud.heartbeat.monitor.modules.gitblit.GitTenantLoginTest;
 import org.wso2.cloud.heartbeat.monitor.modules.jenkins.JenkinsTenantLoginTest;
 import org.wso2.cloud.heartbeat.monitor.modules.ues.UESTenantLoginTest;
@@ -157,6 +158,7 @@ public class ScheduleManager {
         //CloudMgt - contains both cloudmgt and issue tracker
         if(modules.findChildNodeByName(Constants.CLOUD_MGT)!=null){
             List<Class> cloudMgtClasses= new ArrayList<Class>();
+            cloudMgtClasses.add(CloudLoginTest.class);
             scheduleJobs(modules.findChildNodeByName(Constants.CLOUD_MGT), cloudMgtClasses);
         }
 
