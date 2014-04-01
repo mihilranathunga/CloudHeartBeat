@@ -15,6 +15,7 @@
 
 package org.wso2.cloud.heartbeat.monitor.core.clients.https;
 
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -60,6 +61,7 @@ public class HttpsJaggeryClient {
         HttpPost post = new HttpPost(urlStr);
         String respond = "";
         HttpResponse response = null;
+        
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             Set<String> keySet = params.keySet();

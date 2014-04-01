@@ -32,6 +32,13 @@ public class JaggeryAppAuthenticatorClient {
         loginUrl = hostName + JagApiProperties.LOGIN_URL_SFX;
         logOutUrl = hostName + JagApiProperties.LOGOUT_URL_SFX;
     }
+    public JaggeryAppAuthenticatorClient(String hostName, String appName) {
+    	if(appName.equals("cloudmgt")){
+    		loginUrl = hostName + JagApiProperties.CLOUD_LOGIN_URL_SFX;
+            logOutUrl = loginUrl;
+            System.out.println("loginUrl - "+loginUrl);
+    	}
+    }
 
     public boolean login(String userName, String password){
         Map<String, String> params = new HashMap<String, String>();

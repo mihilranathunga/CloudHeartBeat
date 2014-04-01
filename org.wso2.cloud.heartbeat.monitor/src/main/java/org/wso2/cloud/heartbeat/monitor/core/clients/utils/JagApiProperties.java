@@ -19,9 +19,13 @@ public class JagApiProperties {
 
 
     public static final String LOGIN_URL_SFX  = "/appmgt/site/blocks/user/login/ajax/login.jag";
+    public static final String CLOUD_LOGIN_URL_SFX = "/cloudmgt/site/blocks/user/authenticate/ajax/login.jag";
     public static final String LOGOUT_URL_SFX  = "/appmgt/site/blocks/user/logout/ajax/logout.jag";
+    public static final String CLOUD_LOGOUT_URL_SFX = "/cloudmgt/site/blocks/user/authenticate/ajax/login.jag";
     public static final String BUILD_INFO_URL_SFX  = "/appmgt/site/blocks/buildandrepo/list/ajax/list.jag";
     public static final String BUILD_APPLICATION_URL_SFX = "/appmgt/site/blocks/lifecycle/add/ajax/add.jag";
     public static final String ADD_USER_TO_TENANT_URL_SFX = "/appmgt/site/blocks/tenant/users/add/ajax/add.jag";
-
+    public static final String ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX = "/cloudmgt/site/blocks/tenant/users/add/ajax/add.jag";
+    public static final String CHANGE_PASSWD_CLOUDMGT_TENANT_URL_SFX = "/cloudmgt/site/blocks/user/change/ajax/user.jag";
+    
 }
