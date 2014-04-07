@@ -57,6 +57,7 @@ public class Constants {
     public static final String ESB_DEV = "enterprise_service_bus_dev";
     public static final String ESB_TEST = "enterprise_service_bus_test";
     public static final String ESB_PROD = "enterprise_service_bus_prod";
+    public static final String APPLICATION_SERVER= "application_server";
     public static final String APPLICATION_SERVER_DEV = "application_server_dev";
     public static final String APPLICATION_SERVER_TEST = "application_server_test";
     public static final String APPLICATION_SERVER_PROD = "application_server_prod";
