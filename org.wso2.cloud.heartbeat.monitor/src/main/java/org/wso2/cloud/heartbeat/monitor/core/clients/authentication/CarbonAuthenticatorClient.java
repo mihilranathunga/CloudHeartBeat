@@ -35,6 +35,8 @@ public class CarbonAuthenticatorClient {
 
     private static final Log log = LogFactory.getLog(CarbonAuthenticatorClient.class);
     private AuthenticationAdminStub authenticationAdminStub;
+    
+    ServiceContext serviceContext;
 
     /**
      * Initializes authenticator client
@@ -65,7 +67,6 @@ public class CarbonAuthenticatorClient {
     public String login(String userName, String password, String host)
             throws LoginAuthenticationExceptionException, RemoteException {
         Boolean loginStatus;
-        ServiceContext serviceContext;
         String sessionCookie;
         long timeout = 2 * 60 * 1000; // Setting the time out to Two minutes
         authenticationAdminStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(timeout);
@@ -80,6 +81,16 @@ public class CarbonAuthenticatorClient {
                 .getServiceContext();
         sessionCookie = (String) serviceContext.getProperty(HTTPConstants.COOKIE_STRING);
         return sessionCookie;
+    }
+    /**
+     * Get service context from the connection
+     * 
+     */
+    
+    public ServiceContext getServiceContext(){
+    	
+    	return serviceContext;
+    	
     }
 
     /**

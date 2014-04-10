@@ -1,59 +1,81 @@
 package org.wso2.cloud.heartbeat.monitor.modules.bam;
 
+import java.rmi.RemoteException;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.apache.axis2.AxisFault;
+import org.apache.axis2.context.ServiceContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.*;
-import org.wso2.carbon.analytics.hive.stub.HiveExecutionServiceHiveExecutionException;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.wso2.carbon.analytics.hive.stub.HiveExecutionServiceStub.QueryResult;
 import org.wso2.carbon.analytics.hive.stub.HiveExecutionServiceStub.QueryResultRow;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
 import org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient;
 import org.wso2.cloud.heartbeat.monitor.core.clients.service.HiveExecutionServiceClient;
+import org.wso2.cloud.heartbeat.monitor.core.clients.service.RemoteTenantManagerServiceClient;
 import org.wso2.cloud.heartbeat.monitor.core.notification.Mailer;
 import org.wso2.cloud.heartbeat.monitor.core.notification.SMSSender;
 import org.wso2.cloud.heartbeat.monitor.modules.ues.UESTenantLoginTest;
 import org.wso2.cloud.heartbeat.monitor.utils.DbConnectionManager;
 import org.wso2.cloud.heartbeat.monitor.utils.fileutils.CaseConverter;
 
-import java.rmi.RemoteException;
-import java.sql.Connection;
-
 public class HiveScriptExecutionTest implements Job {
 
 	private static final Log log = LogFactory.getLog(UESTenantLoginTest.class);
+
 	private final String TEST_NAME = "HiveScriptExecutionTest";
+
+	/**
+	 * Parameters set by values in HeartBeat.conf
+	 */
 
 	private String tenantUser;
 	private String tenantUserPwd;
+
+	private String adminUsername;
+	private String adminPassword;
+
+	private String isAdminUsername;
+	private String isAdminPassword;
+
+	private String cassandraHost;
+	private String cassandraPort;
+	private String cassandraKsName;
+	private String cassandraKsUsername;
+	private String cassandraKsPassword;
+	private String serverKey;
+
 	private String hostName;
 	private String serviceName;
-	private int requestCount = 0;
+
+	private String identityServerHost;
+
+	/**
+	 * Parameters used by this class
+	 */
+
+	private int tenantID;
+	private String cassandraCfName;
 
 	private CarbonAuthenticatorClient carbonAuthenticatorClient;
 	private HiveExecutionServiceClient hiveClient;
 
-	private String sessionCookie;
+	private CarbonAuthenticatorClient identityServerAuthenticatorClient;
+	private RemoteTenantManagerServiceClient rTSMClient;
 
-	private String userName = "admin";
-	private String password = "admin";
+	private String sessionCookie = null;
+	private String isSessionCookie = null;
 
-	private String hiveQuery =
-	"DROP TABLE request;"
-			
-	+"CREATE EXTERNAL TABLE IF NOT EXISTS request("
-	+"request_id INT, device_type STRING, purpose STRING, requirements STRING, employee_employee_id INT, resolved INT)"
-    +"STORED BY 'org.wso2.carbon.hadoop.hive.jdbc.storage.JDBCStorageHandler'"
-    +"TBLPROPERTIES ("
-    +"'wso2.carbon.datasource.name'='HWDREPO',"
-    +"'hive.jdbc.update.on.duplicate' = 'true' ,"
-    +"'hive.jdbc.primary.key.fields' = 'request_id' ,"
-    +"'hive.jdbc.table.create.query' ="
-    +"'CREATE TABLE request (request_id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-    +"device_type varchar(45) NOT NULL, purpose varchar(400) NOT NULL,requirements varchar(1000) NOT NULL, employee_employee_id int(11) NOT NULL, resolved int(11) NOT NULL, request_date date)');"
-    
-    +"select request_id,device_type,purpose from request;";
+	private int requestCount = 0;
+	private boolean queryExecutionSuccessfull = false;
+	private boolean errorsReported;
 
+	private String hiveQuery;
 
 	/**
 	 * @param jobExecutionContext
@@ -63,31 +85,134 @@ public class HiveScriptExecutionTest implements Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-		initializeLoginTest();
-		executeQuery();
+		
+		if (!errorsReported) {
+			log.info("Tenant : " + tenantUser + " ,TenantPw : " + tenantUserPwd);
+			log.info("BAM -Host: " + hostName + ",Service: " + serviceName + " ,adminUser: " +
+			         adminUsername + " ,adminPw: " + adminPassword);
+			
+			conectToBAMServer();
+		}		
+		if (!errorsReported) {
+			log.info("IS -Host: " + identityServerHost + " ,isAdmin: " + isAdminUsername +
+			         " ,isAdminPw: " + isAdminPassword);
+			
+			getTenantIDFromISServer();
+		}
+		
+		if (!errorsReported) {
+			
+			log.info("Cassandra -Host: " + cassandraHost + " ,Cassandra -Port: " + cassandraPort +
+			         " ,Cassandra KS name: " + cassandraKsName + " ,Cassandra KS usname: " +
+			         cassandraKsUsername + " ,Cassandra KS Pw: " + cassandraKsPassword);
+			
+			initializeHiveExecutionTest();
+		}
+		if (!errorsReported) {
+			executeQuery();
+		}
 	}
 
-	private void initializeLoginTest() {
+	/**
+	 * Login to carbon server and authenticate stub
+	 */
+	private void conectToBAMServer() {
 
-		log.info("Host Name: " + hostName + " ,userName :" + tenantUser + " ,userPassword" +
-		         tenantUserPwd);
 		try {
 			carbonAuthenticatorClient = new CarbonAuthenticatorClient(hostName);
-			sessionCookie = carbonAuthenticatorClient.login(userName, password, hostName);
-
-			log.info("Session Cookie :" + sessionCookie);
+			sessionCookie = carbonAuthenticatorClient.login(adminUsername, adminPassword, hostName);
+			if (sessionCookie.equals(null)) {
+				throw new LoginAuthenticationExceptionException("Session Cookie not recieved");
+			}
 			hiveClient = new HiveExecutionServiceClient(hostName, sessionCookie);
+
 		} catch (AxisFault axisFault) {
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			          ": AxisFault thrown while initiating the test : ", axisFault);
-		} catch (RemoteException rme) {
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			          ": RemoteException thrown while initiating the test : ", rme);
+			countNoOfRequests("AxisFault", axisFault, "conectToBAMServer");
+		} catch (RemoteException re) {
+			countNoOfRequests("RemoteException", re, "conectToBAMServer");
 		} catch (LoginAuthenticationExceptionException lae) {
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			                  ": LoginAuthenticationExceptionException thrown while initiating the test : ",
-			          lae);
+			countNoOfRequests("LoginAuthenticationExceptionException", lae, "conectToBAMServer");
 		}
+		requestCount = 0;
+	}
+
+	/**
+	 * Gets Tenant ID from the Provided Identity Server
+	 * 
+	 */
+
+	private void getTenantIDFromISServer() {
+
+		try {
+			identityServerAuthenticatorClient = new CarbonAuthenticatorClient(identityServerHost);
+			isSessionCookie =
+			                  identityServerAuthenticatorClient.login(tenantUser, tenantUserPwd,
+			                                                          identityServerHost);
+
+			if (isSessionCookie.equals(null)) {
+				throw new LoginAuthenticationExceptionException("Session Cookie not recieved");
+			}
+
+			rTSMClient = new RemoteTenantManagerServiceClient(identityServerHost, isSessionCookie);
+
+			tenantID = rTSMClient.getTenantIdofUser(tenantUser);
+		} catch (AxisFault axisFault) {
+			countNoOfRequests("AxisFault", axisFault, "getTenantIDFromISServer");
+		} catch (RemoteException re) {
+			countNoOfRequests("RemoteException", re, "getTenantIDFromISServer");
+		} catch (LoginAuthenticationExceptionException lae) {
+			countNoOfRequests("LoginAuthenticationExceptionException", lae,
+			                  "getTenantIDFromISServer");
+		}
+		requestCount = 0;
+	}
+
+	/**
+	 * Initialize test variables
+	 * 
+	 */
+
+	private void initializeHiveExecutionTest() {
+
+		try {
+			
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+			String curDate = format.format(cal.getTime());
+			cassandraCfName = "log_" + tenantID + "_" + serverKey + "_" + curDate;
+			log.info("Server Key: " + serverKey + " ,Column Family Name: " + cassandraCfName);
+			hiveQuery =
+			            "CREATE EXTERNAL TABLE IF NOT EXISTS LogEventInfo (" +
+			                    "key STRING, tenantID INT,serverName STRING, appName STRING, priority STRING,logTime DOUBLE,logger STRING,message STRING)" +
+			                    "STORED BY 'org.apache.hadoop.hive.cassandra.CassandraStorageHandler' " +
+			                    "WITH SERDEPROPERTIES (" +
+			                    "\"cassandra.host\" = \"" +
+			                    cassandraHost +
+			                    "\"," +
+			                    "\"cassandra.port\" = \"" +
+			                    cassandraPort +
+			                    "\",\"cassandra.ks.name\" = \"" +
+			                    cassandraKsName +
+			                    "\"," +
+			                    "\"cassandra.ks.username\" = \"" +
+			                    cassandraKsUsername +
+			                    "\"," +
+			                    "\"cassandra.ks.password\" = \"" +
+			                    cassandraKsPassword +
+			                    "\"," +
+			                    "\"cassandra.cf.name\" = \"" +
+			                    cassandraCfName +
+			                    "\"," +
+			                    "\"cassandra.columns.mapping\" = \":key,payload_tenantID,payload_serverName,payload_appName,payload_priority,payload_logTime,payload_logger,payload_message\");"
+
+			                    +
+			                    " SELECT key, tenantID, serverName, serverName, logTime , logger,  message FROM LogEventInfo;"
+
+			                    + "DROP TABLE IF EXISTS LogEventInfo;";
+		} catch (Exception e) {
+			countNoOfRequests("TestSetupException", e, "initializeHiveExecutionTest");
+		}
+		requestCount = 0;
 	}
 
 	/**
@@ -106,7 +231,8 @@ public class HiveScriptExecutionTest implements Job {
 				if (response[i].isResultRowsSpecified()) {
 					resultRows = response[i].getResultRows();
 
-					log.info("Result is there : "+response[i].isResultRowsSpecified());	
+					log.info("Result for : " + response[i].getQuery() + " Response : " +
+					         response[i].isResultRowsSpecified());
 
 					for (int j = 0; j < resultRows.length; j++) {
 
@@ -117,89 +243,103 @@ public class HiveScriptExecutionTest implements Job {
 						}
 						System.out.println();
 					}
+
+					queryExecutionSuccessfull = true;
 				} else {
-					log.info("There's no result");
-					log.info(response[i].getQuery());
+					// log.info("No Result for : " + response[i].getQuery());
 				}
 			}
-		}
-
-		// log.info("Query Executed - "+response.toString());
-
-		catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (HiveExecutionServiceHiveExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			System.out.println("Exception in Execute Query :" + e.getMessage());
-		}
-	}
-
-	/**
-	 * checks login for a service
-	 */
-	private void login() {
-		try {
-			boolean loginStatus =
-			                      carbonAuthenticatorClient.checkLogin(tenantUser, tenantUserPwd,
-			                                                           hostName);
-			if (loginStatus) {
+			
+			if (queryExecutionSuccessfull) {
 				onSuccess();
-			} else {
-				countNoOfLoginRequests("LoginError", null);
 			}
-		} catch (RemoteException e) {
-			countNoOfLoginRequests("RemoteException", e);
-		} catch (LoginAuthenticationExceptionException e) {
-			countNoOfLoginRequests("LoginAuthenticationExceptionException", e);
 		} catch (Exception e) {
-			countNoOfLoginRequests("Exception", e);
+			log.error("Exception in Executing Query :" + e.getMessage());
+			countNoOfRequests("ExecuteQuery", e, "executeQuery");
 		}
+		requestCount = 0;
 	}
 
-	private void countNoOfLoginRequests(String type, Object obj) {
+	private void countNoOfRequests(String type, Object obj, String method) {
 		requestCount++;
 		if (requestCount == 3) {
-			handleError(type, obj);
+			handleError(type, obj, method);
 			requestCount = 0;
 		} else {
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
-				// Exception ignored
 			}
-			login();
+			if (type.equals("RemoteException") |
+			    type.equals("LoginAuthenticationExceptionException") | type.equals("AxisFault")) {
+
+				if (method.equals("conectToBAMServer")) {
+					conectToBAMServer();
+				} else if (method.equals("getTenantIDFromISServer")) {
+					getTenantIDFromISServer();
+				}
+			} else if (type.equals("TestSetupException")) {
+				initializeHiveExecutionTest();
+			} else if (type.equals("ExecuteQuery")) {
+				executeQuery();
+			}
 		}
 	}
 
-	private void handleError(String type, Object obj) {
-		if (type.equals("LoginError")) {
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			          ": Login failure. Returned false as a login status by Server");
-			onFailure("Tenant login failure");
-		} else if (type.equals("AxisFault")) {
+	private void handleError(String type, Object obj, String method) {
+		if (type.equals("AxisFault")) {
 			AxisFault axisFault = (AxisFault) obj;
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			          ": AxisFault thrown while authenticating the stub : ", axisFault);
+			if (method.equals("conectToBAMServer")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Authentication Stub: " +
+				                  hostName +
+				                  ": AxisFault thrown while authenticating the stub from BAM: ",
+				          axisFault);
+			} else if (method.equals("getTenantIDFromISServer")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Getting Tenant ID: " +
+				                  hostName + ": AxisFault thrown while getting Tenant ID from IS: ",
+				          axisFault);
+			}
 			onFailure(axisFault.getMessage());
 		} else if (type.equals("RemoteException")) {
 			RemoteException remoteException = (RemoteException) obj;
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			                  ": RemoteException thrown while login from Heartbeat tenant : ",
-			          remoteException);
+			if (method.equals("conectToBAMServer")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Authentication Stub: " +
+				                  hostName +
+				                  ": RemoteException thrown while authenticating the stub : ",
+				          remoteException);
+			} else if (method.equals("getTenantIDFromISServer")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Getting Tenant ID: " +
+				                  hostName +
+				                  ": RemoteException thrown while getting Tenant ID from IS: ",
+				          remoteException);
+			}
+
 			onFailure(remoteException.getMessage());
 		} else if (type.equals("LoginAuthenticationExceptionException")) {
 			LoginAuthenticationExceptionException e = (LoginAuthenticationExceptionException) obj;
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			                  ": LoginAuthenticationException thrown while login from Heartbeat tenant : ",
-			          e);
+			if (method.equals("conectToBAMServer")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Authentication Stub: " +
+				                  hostName +
+				                  ": LoginAuthenticationException thrown while authenticating the stub : ",
+				          e);
+			} else if (method.equals("getTenantIDFromISServer")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Getting Tenant ID: " +
+				                  hostName +
+				                  ": LoginAuthenticationException thrown while getting Tenant ID from IS: ",
+				          e);
+			}
+
 			onFailure(e.getMessage());
-		} else if (type.equals("Exception")) {
+		} else if (type.equals("TestSetupException")) {
 			Exception e = (Exception) obj;
-			log.error(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: " + hostName +
-			          ": Exception thrown while login from Heartbeat tenant : ", e);
+			log.error(CaseConverter.splitCamelCase(serviceName) +
+			          " - Initializing Test Variables: " + hostName +
+			          ": Exception thrown while setting up test: ", e);
+			onFailure(e.getMessage());
+		} else if (type.equals("ExecuteQuery")) {
+			Exception e = (Exception) obj;
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Query Execution: " +
+			          hostName + ": Exception thrown while executing query: ", e);
 			onFailure(e.getMessage());
 		}
 	}
@@ -215,7 +355,7 @@ public class HiveScriptExecutionTest implements Job {
 		long timestamp = System.currentTimeMillis();
 		DbConnectionManager.insertLiveStatus(connection, timestamp, serviceName, TEST_NAME, success);
 
-		log.info(CaseConverter.splitCamelCase(serviceName) + " - Tenant Login: SUCCESS");
+		log.info(CaseConverter.splitCamelCase(serviceName) + " - " + TEST_NAME + ": SUCCESS");
 	}
 
 	/**
@@ -226,20 +366,30 @@ public class HiveScriptExecutionTest implements Job {
 	 */
 	private void onFailure(String msg) {
 
-		boolean success = false;
-		DbConnectionManager dbConnectionManager = DbConnectionManager.getInstance();
-		Connection connection = dbConnectionManager.getConnection();
+		log.error(CaseConverter.splitCamelCase(serviceName) + " - " + TEST_NAME + ": FAILURE  - " +
+		          msg);
 
-		long timestamp = System.currentTimeMillis();
-		DbConnectionManager.insertLiveStatus(connection, timestamp, serviceName, TEST_NAME, success);
-		DbConnectionManager.insertFailureDetail(connection, timestamp, serviceName, TEST_NAME, msg);
+		if (!errorsReported) {
 
-		Mailer mailer = Mailer.getInstance();
-		mailer.send(CaseConverter.splitCamelCase(serviceName) + " :FAILURE",
-		            CaseConverter.splitCamelCase(TEST_NAME) + ": " + msg, "");
-		SMSSender smsSender = SMSSender.getInstance();
-		smsSender.send(CaseConverter.splitCamelCase(serviceName) + ": " +
-		               CaseConverter.splitCamelCase(TEST_NAME) + ": Failure");
+			boolean success = false;
+			DbConnectionManager dbConnectionManager = DbConnectionManager.getInstance();
+			Connection connection = dbConnectionManager.getConnection();
+
+			long timestamp = System.currentTimeMillis();
+			DbConnectionManager.insertLiveStatus(connection, timestamp, serviceName, TEST_NAME,
+			                                     success);
+			DbConnectionManager.insertFailureDetail(connection, timestamp, serviceName, TEST_NAME,
+			                                        msg);
+
+			Mailer mailer = Mailer.getInstance();
+			mailer.send(CaseConverter.splitCamelCase(serviceName) + " :FAILURE",
+			            CaseConverter.splitCamelCase(TEST_NAME) + ": " + msg, "");
+			SMSSender smsSender = SMSSender.getInstance();
+			smsSender.send(CaseConverter.splitCamelCase(serviceName) + ": " +
+			               CaseConverter.splitCamelCase(TEST_NAME) + ": Failure");
+
+			errorsReported = true;
+		}
 	}
 
 	/**
@@ -263,6 +413,98 @@ public class HiveScriptExecutionTest implements Job {
 	}
 
 	/**
+	 * Sets BAM Admin user name
+	 * 
+	 * @param adminUsername
+	 *            admin user name
+	 */
+
+	public void setAdminUsername(String adminUsername) {
+		this.adminUsername = adminUsername;
+	}
+
+	/**
+	 * Sets BAM Admin user password
+	 * 
+	 * @param adminPassword
+	 *            admin user password
+	 */
+	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
+	}
+
+	/**
+	 * Sets identity Server admin username
+	 * 
+	 * @param isAdminUsername
+	 */
+
+	public void setIsAdminUsername(String isAdminUsername) {
+		this.isAdminUsername = isAdminUsername;
+	}
+
+	/**
+	 * Sets identity Server admin password
+	 * 
+	 * @param isAdminPassword
+	 */
+
+	public void setIsAdminPassword(String isAdminPassword) {
+		this.isAdminPassword = isAdminPassword;
+	}
+
+	/**
+	 * Sets Cassandra hostname
+	 * 
+	 * @param cassandraHost
+	 *            cassandra host name
+	 */
+
+	public void setCassandraHost(String cassandraHost) {
+		this.cassandraHost = cassandraHost;
+	}
+
+	/**
+	 * @param cassandraPort
+	 *            the cassandraPort to set
+	 */
+	public void setCassandraPort(String cassandraPort) {
+		this.cassandraPort = cassandraPort;
+	}
+
+	/**
+	 * @param cassandraKsName
+	 *            the cassandraKsName to set
+	 */
+	public void setCassandraKsName(String cassandraKsName) {
+		this.cassandraKsName = cassandraKsName;
+	}
+
+	/**
+	 * @param cassandraKsUsername
+	 *            the cassandraKsUsername to set
+	 */
+	public void setCassandraKsUsername(String cassandraKsUsername) {
+		this.cassandraKsUsername = cassandraKsUsername;
+	}
+
+	/**
+	 * @param cassandraKsPassword
+	 *            the cassandraKsPassword to set
+	 */
+	public void setCassandraKsPassword(String cassandraKsPassword) {
+		this.cassandraKsPassword = cassandraKsPassword;
+	}
+
+	/**
+	 * @param serverKey
+	 *            the serverKey to set
+	 */
+	public void setServerKey(String serverKey) {
+		this.serverKey = serverKey;
+	}
+
+	/**
 	 * Sets service host
 	 * 
 	 * @param hostName
@@ -280,6 +522,16 @@ public class HiveScriptExecutionTest implements Job {
 	 */
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	/**
+	 * Sets identity Server Hostname
+	 * 
+	 * @param identityServerHost
+	 */
+
+	public void setIdentityServerHost(String identityServerHost) {
+		this.identityServerHost = identityServerHost;
 	}
 
 }

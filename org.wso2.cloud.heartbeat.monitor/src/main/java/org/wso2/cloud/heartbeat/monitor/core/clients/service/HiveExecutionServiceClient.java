@@ -17,7 +17,7 @@ public class HiveExecutionServiceClient {
 	private static final Log log = LogFactory.getLog(HiveExecutionServiceClient.class);
 
 	private final String serviceName = "HiveExecutionService";
-	private HiveExecutionServiceStub HiveExecutionServiceStub;
+	private HiveExecutionServiceStub hiveExecutionServiceStub;
 	String backendUrl;
 	private String endPoint;
 
@@ -34,8 +34,8 @@ public class HiveExecutionServiceClient {
 
         backendUrl= "https://" + hostName + "/services/";
         endPoint = backendUrl + serviceName;
-        HiveExecutionServiceStub = new HiveExecutionServiceStub(endPoint);
-        AuthenticateStub.authenticateStub(sessionCookie, HiveExecutionServiceStub);
+        hiveExecutionServiceStub = new HiveExecutionServiceStub(endPoint);
+        AuthenticateStub.authenticateStub(sessionCookie, hiveExecutionServiceStub);
       
     }
 	
@@ -49,7 +49,7 @@ public class HiveExecutionServiceClient {
 	
 	public QueryResult[] executeHiveScript(String hiveScriptName, String hiveScript) throws RemoteException, HiveExecutionServiceHiveExecutionException{
 		
-		return HiveExecutionServiceStub.executeHiveScript( hiveScriptName, hiveScript);	
+		return hiveExecutionServiceStub.executeHiveScript( hiveScriptName, hiveScript);	
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class HiveExecutionServiceClient {
 	
 	public void startExecutingHiveScript(String hiveScriptName, String hiveScript, HiveExecutionServiceCallbackHandler callBack) throws RemoteException{
 		
-		HiveExecutionServiceStub.startexecuteHiveScript(hiveScriptName, hiveScript, callBack);
+		hiveExecutionServiceStub.startexecuteHiveScript(hiveScriptName, hiveScript, callBack);
 	}
 
 }
