@@ -27,6 +27,7 @@ import org.wso2.cloud.heartbeat.monitor.core.configuration.parser.nginx.NodeBuil
 import org.wso2.cloud.heartbeat.monitor.core.schedule.utils.UtilJobScheduler;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ApplicationBuildTest;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ImportMemberToTenantTest;
+import org.wso2.cloud.heartbeat.monitor.modules.bam.CassandraLogColumnFamilyExistanceTest;
 import org.wso2.cloud.heartbeat.monitor.modules.bam.HiveScriptExecutionTest;
 import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest;
 import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.UserFunctionsTest;
@@ -218,6 +219,7 @@ public class ScheduleManager {
         if(modules.findChildNodeByName(Constants.BUSINESS_ACTIVITY_MONITOR)!=null){
             List<Class> bamClasses = new ArrayList<Class>();
             bamClasses.add(HiveScriptExecutionTest.class);
+            bamClasses.add(CassandraLogColumnFamilyExistanceTest.class);
             scheduleJobs(modules.findChildNodeByName(Constants.BUSINESS_ACTIVITY_MONITOR),bamClasses);
         }
 
