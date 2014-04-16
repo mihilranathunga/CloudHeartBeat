@@ -15,7 +15,10 @@ import org.quartz.JobExecutionException;
 import org.wso2.carbon.analytics.hive.stub.HiveExecutionServiceStub.QueryResult;
 import org.wso2.carbon.analytics.hive.stub.HiveExecutionServiceStub.QueryResultRow;
 import org.wso2.carbon.authenticator.stub.LoginAuthenticationExceptionException;
+import org.wso2.carbon.cassandra.mgt.stub.ks.CassandraKeyspaceAdminCassandraServerManagementException;
+import org.wso2.carbon.cassandra.mgt.stub.ks.xsd.ColumnFamilyInformation;
 import org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient;
+import org.wso2.cloud.heartbeat.monitor.core.clients.service.CassandraKeyspaceAdminClient;
 import org.wso2.cloud.heartbeat.monitor.core.clients.service.HiveExecutionServiceClient;
 import org.wso2.cloud.heartbeat.monitor.core.clients.service.RemoteTenantManagerServiceClient;
 import org.wso2.cloud.heartbeat.monitor.core.notification.Mailer;
@@ -26,7 +29,7 @@ import org.wso2.cloud.heartbeat.monitor.utils.fileutils.CaseConverter;
 
 public class HiveScriptExecutionTest implements Job {
 
-	private static final Log log = LogFactory.getLog(UESTenantLoginTest.class);
+	private static final Log log = LogFactory.getLog(HiveScriptExecutionTest.class);
 
 	private final String TEST_NAME = "HiveScriptExecutionTest";
 
@@ -77,6 +80,10 @@ public class HiveScriptExecutionTest implements Job {
 
 	private String hiveQuery;
 
+	private CassandraKeyspaceAdminClient keyspaceClient;
+
+	private ColumnFamilyInformation columnFamily;
+
 	/**
 	 * @param jobExecutionContext
 	 *            "hostName" ,"tenantUser", "tenantUserPwd" "serviceName" params
@@ -91,7 +98,7 @@ public class HiveScriptExecutionTest implements Job {
 			log.info("BAM -Host: " + hostName + ",Service: " + serviceName + " ,adminUser: " +
 			         adminUsername + " ,adminPw: " + adminPassword);
 			
-			conectToBAMServer();
+			connectToBAMServer();
 		}		
 		if (!errorsReported) {
 			log.info("IS -Host: " + identityServerHost + " ,isAdmin: " + isAdminUsername +
@@ -99,7 +106,6 @@ public class HiveScriptExecutionTest implements Job {
 			
 			getTenantIDFromISServer();
 		}
-		
 		if (!errorsReported) {
 			
 			log.info("Cassandra -Host: " + cassandraHost + " ,Cassandra -Port: " + cassandraPort +
@@ -107,6 +113,10 @@ public class HiveScriptExecutionTest implements Job {
 			         cassandraKsUsername + " ,Cassandra KS Pw: " + cassandraKsPassword);
 			
 			initializeHiveExecutionTest();
+		}
+		if(!errorsReported){
+			log.info("Cassandra Column Family name : "+cassandraCfName);
+			getColumnFamily();
 		}
 		if (!errorsReported) {
 			executeQuery();
@@ -116,7 +126,7 @@ public class HiveScriptExecutionTest implements Job {
 	/**
 	 * Login to carbon server and authenticate stub
 	 */
-	private void conectToBAMServer() {
+	private void connectToBAMServer() {
 
 		try {
 			carbonAuthenticatorClient = new CarbonAuthenticatorClient(hostName);
@@ -125,13 +135,14 @@ public class HiveScriptExecutionTest implements Job {
 				throw new LoginAuthenticationExceptionException("Session Cookie not recieved");
 			}
 			hiveClient = new HiveExecutionServiceClient(hostName, sessionCookie);
+			keyspaceClient = new CassandraKeyspaceAdminClient(hostName, sessionCookie);
 
 		} catch (AxisFault axisFault) {
-			countNoOfRequests("AxisFault", axisFault, "conectToBAMServer");
+			countNoOfRequests("AxisFault", axisFault, "connectToBAMServer");
 		} catch (RemoteException re) {
-			countNoOfRequests("RemoteException", re, "conectToBAMServer");
+			countNoOfRequests("RemoteException", re, "connectToBAMServer");
 		} catch (LoginAuthenticationExceptionException lae) {
-			countNoOfRequests("LoginAuthenticationExceptionException", lae, "conectToBAMServer");
+			countNoOfRequests("LoginAuthenticationExceptionException", lae, "connectToBAMServer");
 		}
 		requestCount = 0;
 	}
@@ -214,6 +225,22 @@ public class HiveScriptExecutionTest implements Job {
 		}
 		requestCount = 0;
 	}
+	
+	/**
+	 *Check if column family exists
+	 */
+	
+	private void getColumnFamily(){
+
+			try {
+	            columnFamily = keyspaceClient.getColumnFamilyof(cassandraKsName, cassandraCfName);
+            } catch (RemoteException e) {
+            	countNoOfRequests("CassandraServiceException", e, "getColumnFamily");
+            } catch (CassandraKeyspaceAdminCassandraServerManagementException e) {
+            	countNoOfRequests("RemoteException", e, "getColumnFamily");
+            }
+		requestCount = 0;
+	}
 
 	/**
 	 * Executes Query
@@ -273,13 +300,17 @@ public class HiveScriptExecutionTest implements Job {
 			if (type.equals("RemoteException") |
 			    type.equals("LoginAuthenticationExceptionException") | type.equals("AxisFault")) {
 
-				if (method.equals("conectToBAMServer")) {
-					conectToBAMServer();
+				if (method.equals("connectToBAMServer")) {
+					connectToBAMServer();
 				} else if (method.equals("getTenantIDFromISServer")) {
 					getTenantIDFromISServer();
+				} else if (method.equals("getColumnFamily")) {
+					getColumnFamily();
 				}
 			} else if (type.equals("TestSetupException")) {
 				initializeHiveExecutionTest();
+			} else if (type.equals("CassandraServiceException")) {
+				getColumnFamily();
 			} else if (type.equals("ExecuteQuery")) {
 				executeQuery();
 			}
@@ -289,7 +320,7 @@ public class HiveScriptExecutionTest implements Job {
 	private void handleError(String type, Object obj, String method) {
 		if (type.equals("AxisFault")) {
 			AxisFault axisFault = (AxisFault) obj;
-			if (method.equals("conectToBAMServer")) {
+			if (method.equals("connectToBAMServer")) {
 				log.error(CaseConverter.splitCamelCase(serviceName) + " - Authentication Stub: " +
 				                  hostName +
 				                  ": AxisFault thrown while authenticating the stub from BAM: ",
@@ -302,7 +333,7 @@ public class HiveScriptExecutionTest implements Job {
 			onFailure(axisFault.getMessage());
 		} else if (type.equals("RemoteException")) {
 			RemoteException remoteException = (RemoteException) obj;
-			if (method.equals("conectToBAMServer")) {
+			if (method.equals("connectToBAMServer")) {
 				log.error(CaseConverter.splitCamelCase(serviceName) + " - Authentication Stub: " +
 				                  hostName +
 				                  ": RemoteException thrown while authenticating the stub : ",
@@ -312,12 +343,17 @@ public class HiveScriptExecutionTest implements Job {
 				                  hostName +
 				                  ": RemoteException thrown while getting Tenant ID from IS: ",
 				          remoteException);
-			}
+			} else if (method.equals("getColumnFamily")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Getting Column Family: " +
+		                  hostName +
+		                  ": RemoteException thrown while getting Column Family from BAM: ",
+		          remoteException);
+	}
 
 			onFailure(remoteException.getMessage());
 		} else if (type.equals("LoginAuthenticationExceptionException")) {
 			LoginAuthenticationExceptionException e = (LoginAuthenticationExceptionException) obj;
-			if (method.equals("conectToBAMServer")) {
+			if (method.equals("connectToBAMServer")) {
 				log.error(CaseConverter.splitCamelCase(serviceName) + " - Authentication Stub: " +
 				                  hostName +
 				                  ": LoginAuthenticationException thrown while authenticating the stub : ",
@@ -336,7 +372,12 @@ public class HiveScriptExecutionTest implements Job {
 			          " - Initializing Test Variables: " + hostName +
 			          ": Exception thrown while setting up test: ", e);
 			onFailure(e.getMessage());
-		} else if (type.equals("ExecuteQuery")) {
+		} else if (type.equals("CassandraServiceException")) {
+			Exception e = (Exception) obj;
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Getting Column Family: " +
+			          hostName + ": Exception thrown while getting Column Family from BAM: ", e);
+			onFailure(e.getMessage());
+		}else if (type.equals("ExecuteQuery")) {
 			Exception e = (Exception) obj;
 			log.error(CaseConverter.splitCamelCase(serviceName) + " - Query Execution: " +
 			          hostName + ": Exception thrown while executing query: ", e);

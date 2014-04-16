@@ -205,7 +205,7 @@ public class JobScheduler {
                 .withSchedule(simpleSchedule()
                                       .withIntervalInHours(interval)
                                       .repeatForever())
-                .startAt(futureDate(generator.nextInt(1), DateBuilder.IntervalUnit.MINUTE))
+                .startAt(futureDate(generator.nextInt(2), DateBuilder.IntervalUnit.MINUTE))
                 .build();
 
         return trigger;
@@ -234,7 +234,7 @@ public class JobScheduler {
                 .withSchedule(simpleSchedule()
                                       .withIntervalInMinutes(interval)
                                       .repeatForever())
-                .startAt(futureDate(generator.nextInt(1), DateBuilder.IntervalUnit.MINUTE))
+                .startAt(futureDate(generator.nextInt(2), DateBuilder.IntervalUnit.MINUTE))
                 .build();
 
         return trigger;

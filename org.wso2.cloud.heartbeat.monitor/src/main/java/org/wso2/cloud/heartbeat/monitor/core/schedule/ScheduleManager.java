@@ -21,13 +21,12 @@ import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
-import org.wso2.cloud.heartbeat.monitor.core.clients.service.HiveExecutionServiceClient;
 import org.wso2.cloud.heartbeat.monitor.core.configuration.Node;
 import org.wso2.cloud.heartbeat.monitor.core.configuration.parser.nginx.NodeBuilder;
 import org.wso2.cloud.heartbeat.monitor.core.schedule.utils.UtilJobScheduler;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ApplicationBuildTest;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ImportMemberToTenantTest;
-import org.wso2.cloud.heartbeat.monitor.modules.bam.CassandraLogColumnFamilyExistanceTest;
+import org.wso2.cloud.heartbeat.monitor.modules.bam.CassandraPastLogsDeletionTest;
 import org.wso2.cloud.heartbeat.monitor.modules.bam.HiveScriptExecutionTest;
 import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest;
 import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.UserFunctionsTest;
@@ -219,7 +218,7 @@ public class ScheduleManager {
         if(modules.findChildNodeByName(Constants.BUSINESS_ACTIVITY_MONITOR)!=null){
             List<Class> bamClasses = new ArrayList<Class>();
             bamClasses.add(HiveScriptExecutionTest.class);
-            bamClasses.add(CassandraLogColumnFamilyExistanceTest.class);
+            bamClasses.add(CassandraPastLogsDeletionTest.class);
             scheduleJobs(modules.findChildNodeByName(Constants.BUSINESS_ACTIVITY_MONITOR),bamClasses);
         }
 

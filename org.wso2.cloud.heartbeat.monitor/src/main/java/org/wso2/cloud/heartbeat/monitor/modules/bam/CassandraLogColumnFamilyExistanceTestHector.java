@@ -22,13 +22,13 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.wso2.cloud.heartbeat.monitor.modules.ues.UESTenantLoginTest;
 
-public class CassandraLogColumnFamilyExistanceTest implements Job{
+public class CassandraLogColumnFamilyExistanceTestHector implements Job{
 
 	/**
 	 * @param args
 	 */
 	
-	private static final Log log = LogFactory.getLog(CassandraLogColumnFamilyExistanceTest.class);
+	private static final Log log = LogFactory.getLog(CassandraLogColumnFamilyExistanceTestHector.class);
 
 	private final String TEST_NAME = "CassandraLogColumnFamilyExistanceTest";
 
@@ -81,7 +81,7 @@ public class CassandraLogColumnFamilyExistanceTest implements Job{
 	 * @param cassandraHost the cassandraHost to set
 	 */
 	public static void setCassandraHost(String cassandraHost) {
-		CassandraLogColumnFamilyExistanceTest.cassandraHost = cassandraHost;
+		CassandraLogColumnFamilyExistanceTestHector.cassandraHost = cassandraHost;
 	}
 	public static void createSchema(){
         cluster.addKeyspace(newKeyspaceDef,true);
