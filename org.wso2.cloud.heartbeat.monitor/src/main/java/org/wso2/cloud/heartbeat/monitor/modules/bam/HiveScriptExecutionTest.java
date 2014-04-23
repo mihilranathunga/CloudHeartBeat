@@ -55,6 +55,7 @@ public class HiveScriptExecutionTest implements Job {
 
 	private String hostName;
 	private String serviceName;
+	private String completeTestName;
 
 	private String identityServerHost;
 
@@ -92,7 +93,7 @@ public class HiveScriptExecutionTest implements Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-		
+		setCompleteTestName(CaseConverter.splitCamelCase(serviceName) + " - Hive Script Execution Test : ");
 		if (!errorsReported) {
 			log.info("Tenant : " + tenantUser + " ,TenantPw : " + tenantUserPwd);
 			log.info("BAM -Host: " + hostName + ",Service: " + serviceName + " ,adminUser: " +
@@ -396,7 +397,7 @@ public class HiveScriptExecutionTest implements Job {
 		long timestamp = System.currentTimeMillis();
 		DbConnectionManager.insertLiveStatus(connection, timestamp, serviceName, TEST_NAME, success);
 
-		log.info(CaseConverter.splitCamelCase(serviceName) + " - " + TEST_NAME + ": SUCCESS");
+		log.info(completeTestName+ "SUCCESS");
 	}
 
 	/**
@@ -407,7 +408,7 @@ public class HiveScriptExecutionTest implements Job {
 	 */
 	private void onFailure(String msg) {
 
-		log.error(CaseConverter.splitCamelCase(serviceName) + " - " + TEST_NAME + ": FAILURE  - " +
+		log.error(completeTestName+ "FAILURE  - " +
 		          msg);
 
 		if (!errorsReported) {
@@ -564,6 +565,14 @@ public class HiveScriptExecutionTest implements Job {
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
+	
+	/**
+     * Sets Display Service name
+     * @param completeTestName Service name
+     */
+    public void setCompleteTestName(String completeTestName) {
+        this.completeTestName = completeTestName;
+    }
 
 	/**
 	 * Sets identity Server Hostname

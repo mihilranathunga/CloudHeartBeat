@@ -207,6 +207,25 @@ modules {
     }
 ########################## Mihil Tests #####################################
 
+
+	cloud_management{
+        host_name                    cloudmgt.cloudpreview.wso2.com;
+
+		import_user_members_to_tenant_test{
+		    #cron_trigger               ;
+	            simple_trigger              60 m;
+	            deployment_wait_time        60 s;	
+		}
+	
+		user_functions_test{
+		    #cron_trigger               ;
+	            simple_trigger              60 m;
+	            deployment_wait_time        60 s;
+		    
+		    tenant_user_temp_pwd	mihil1234;
+		}
+    }
+
 	application_server{
         host_name                    10.100.4.57:9451;
     }

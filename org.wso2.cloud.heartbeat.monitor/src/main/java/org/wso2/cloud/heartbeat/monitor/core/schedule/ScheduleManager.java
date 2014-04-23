@@ -16,6 +16,10 @@
 
 package org.wso2.cloud.heartbeat.monitor.core.schedule;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.quartz.Scheduler;
@@ -28,8 +32,8 @@ import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ApplicationBuildTest;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.ImportMemberToTenantTest;
 import org.wso2.cloud.heartbeat.monitor.modules.bam.CassandraPastLogsDeletionTest;
 import org.wso2.cloud.heartbeat.monitor.modules.bam.HiveScriptExecutionTest;
+import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest;
 import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest;
-import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.UserFunctionsTest;
 import org.wso2.cloud.heartbeat.monitor.modules.gitblit.GitTenantLoginTest;
 import org.wso2.cloud.heartbeat.monitor.modules.jenkins.JenkinsTenantLoginTest;
 import org.wso2.cloud.heartbeat.monitor.modules.ues.UESTenantLoginTest;
@@ -37,10 +41,6 @@ import org.wso2.cloud.heartbeat.monitor.modules.utils.DbCleaner;
 import org.wso2.cloud.heartbeat.monitor.modules.utils.DigestMailer;
 import org.wso2.cloud.heartbeat.monitor.utils.Constants;
 import org.wso2.cloud.heartbeat.monitor.utils.fileutils.FileManager;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Helper class to schedule service tests using JobScheduler
@@ -162,7 +162,7 @@ public class ScheduleManager {
         if(modules.findChildNodeByName(Constants.CLOUD_MGT)!=null){
             List<Class> cloudMgtClasses= new ArrayList<Class>();
             cloudMgtClasses.add(ImportUserMembersToTenantTest.class);
-            cloudMgtClasses.add(UserFunctionsTest.class);
+            cloudMgtClasses.add(ChangePassswordTest.class);
             scheduleJobs(modules.findChildNodeByName(Constants.CLOUD_MGT), cloudMgtClasses);
         }
 
