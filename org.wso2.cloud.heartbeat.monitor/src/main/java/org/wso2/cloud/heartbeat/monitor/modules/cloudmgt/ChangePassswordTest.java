@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2013, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.wso2.cloud.heartbeat.monitor.modules.cloudmgt;
 
 import org.apache.axis2.AxisFault;
@@ -12,8 +28,8 @@ import org.wso2.cloud.heartbeat.monitor.core.clients.https.HttpsJaggeryClient;
 import org.wso2.cloud.heartbeat.monitor.core.clients.utils.JagApiProperties;
 import org.wso2.cloud.heartbeat.monitor.core.notification.Mailer;
 import org.wso2.cloud.heartbeat.monitor.core.notification.SMSSender;
-import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.exceptions.FalseReturnException;
-import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.exceptions.JaggeryAppLoginException;
+import org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.FalseReturnException;
+import org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException;
 import org.wso2.cloud.heartbeat.monitor.utils.DbConnectionManager;
 import org.wso2.cloud.heartbeat.monitor.utils.ModuleUtils;
 import org.wso2.cloud.heartbeat.monitor.utils.fileutils.CaseConverter;
@@ -80,8 +96,7 @@ public class ChangePassswordTest implements Job {
 			loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
 
 			if (!loginStatus) {
-				throw new JaggeryAppLoginException(
-				                                   "Login failure to cloudmgt jaggery app. Returned false as login status.");
+				throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as login status.");
 			}
 			isTenantAdmin = true;
 		} catch (JaggeryAppLoginException je) {
@@ -111,8 +126,7 @@ public class ChangePassswordTest implements Job {
 					log.info(TEST_NAME + " : Change Password Success");
 				}
 			} else {
-				throw new JaggeryAppLoginException(
-				                                   "Login failure to cloudmgt jaggery app. Returned false as login status");
+				throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as login status");
 			}
 		} catch (JaggeryAppLoginException je) {
 			countNoOfRequests("JaggeryAppLoginException", je, "changePassword");
@@ -139,21 +153,15 @@ public class ChangePassswordTest implements Job {
 				String result = HttpsJaggeryClient.httpPost(url, params);
 
 				if (result.equals("false")) {
-					throw new FalseReturnException(
-					                               "Reset Password returned status as false. New Password for user:" +
-					                                       tenantUser +
-					                                       " is \'" +
-					                                       tenantUserTempPwd + "\'");
+					throw new FalseReturnException("Reset Password returned status as false. New Password for user:" 
+													+ tenantUser + " is \'" + tenantUserTempPwd + "\'");
 				} else if (result.equals("true")) {
 					log.info(TEST_NAME + " :Reset Password Success");
 					onSuccess();
 				}
 			} else {
-				throw new JaggeryAppLoginException(
-				                                   "Login failure to cloudmgt jaggery app. Returned false as a login status. New Password for user:" +
-				                                           tenantUser +
-				                                           " is \'" +
-				                                           tenantUserTempPwd + "\'");
+				throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as a login status. New Password for user:" 
+				                                 	+ tenantUser + " is \'" + tenantUserTempPwd + "\'");
 			}
 		} catch (FalseReturnException fe) {
 			countNoOfRequests("FalseReturnException", fe, "resetPasssword");
@@ -181,70 +189,43 @@ public class ChangePassswordTest implements Job {
 			}
 
 			if (type.equals("JaggeryAppLoginException")) {
-				if (method.equals("initWebAppTest")) {
-					initWebAppTest();
-				} else if (method.equals("changePassword")) {
-					changePassword();
-				} else if (method.equals("resetPasssword")) {
-					resetPasssword();
-				}
-			} else if (type.equals("FalseReturnException")) {
-				if (method.equals("changePassword")) {
-					changePassword();
-				} else if (method.equals("resetPasssword")) {
-					resetPasssword();
-				}
-			} else if (type.equals("ExecutionException")) {
-				if (method.equals("initWebAppTest")) {
-					initWebAppTest();
-				} else if (method.equals("changePassword")) {
-					changePassword();
-				} else if (method.equals("resetPasssword")) {
-					resetPasssword();
-				}
-			}
 
+				loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
+			} else if (type.equals("FalseReturnException")) {
+
+				loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
+			}
+			if (method.equals("initWebAppTest")) {
+				initWebAppTest();
+			} else if (method.equals("changePassword")) {
+				changePassword();
+			} else if (method.equals("resetPasssword")) {
+				resetPasssword();
+			}
 		}
 	}
 
 	private void handleError(String type, Object obj, String method) {
+		Exception exception = null;
 		if (type.equals("JaggeryAppLoginException")) {
-			JaggeryAppLoginException jaggeryAppLoginException = (JaggeryAppLoginException) obj;
-			if (method.equals("initWebAppTest")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
-				          hostName, jaggeryAppLoginException);
-			} else if (method.equals("changePassword")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " +
-				          hostName, jaggeryAppLoginException);
-			} else if (method.equals("resetPasssword")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " +
-				          hostName, jaggeryAppLoginException);
-			}
-			onFailure(jaggeryAppLoginException.getMessage());
+			exception = (JaggeryAppLoginException) obj;
+
 		} else if (type.equals("FalseReturnException")) {
-			FalseReturnException falseReturnException = (FalseReturnException) obj;
-			if (method.equals("changePassword")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " +
-				          hostName, falseReturnException);
-			} else if (method.equals("resetPasssword")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " +
-				          hostName, falseReturnException);
-			}
-			onFailure(falseReturnException.getMessage());
+			exception = (FalseReturnException) obj;
 		} else if (type.equals("ExecutionException")) {
-			Exception exception = (Exception) obj;
-			if (method.equals("initWebAppTest")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
-				          hostName, exception);
-			} else if (method.equals("changePassword")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " +
-				          hostName, exception);
-			} else if (method.equals("resetPasssword")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " +
-				          hostName, exception);
-			}
-			onFailure(exception.getMessage());
+			exception = (Exception) obj;
 		}
+		if (method.equals("initWebAppTest")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " + hostName,
+			          exception);
+		} else if (method.equals("changePassword")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " + hostName,
+			          exception);
+		} else if (method.equals("resetPasssword")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " + hostName,
+			          exception);
+		}
+		onFailure(exception.getMessage());
 	}
 
 	/**
@@ -339,8 +320,7 @@ public class ChangePassswordTest implements Job {
 	 *            Deployment wait time
 	 */
 	public void setDeploymentWaitTime(String deploymentWaitTime) {
-		this.deploymentWaitTime =
-		                          Integer.parseInt(deploymentWaitTime.split("s")[0].replace(" ", "")) * 1000;
+		this.deploymentWaitTime = Integer.parseInt(deploymentWaitTime.split("s")[0].replace(" ", "")) * 1000;
 	}
 
 	/**

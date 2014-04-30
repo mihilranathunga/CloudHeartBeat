@@ -234,28 +234,33 @@ modules {
         host_name                    10.100.4.57:9443;
         admin_username               admin;
         admin_password               admin;
-        
-        
+         	
+        identity_server_host		10.100.4.57:9444;
+       	is_admin_username			admin;
+        is_admin_password			admin;
+         	
+         	
+        cassandra_host				localhost;
+        cassandra_port				9160;
+        cassandra_ks_name			EVENT_KS;
+        cassandra_ks_username		admin;
+        cassandra_ks_password		admin; 		
+         	
+      # atleast one test should be run on the server pointed by 
+      # this server key before executing this test 
+        	
+        server_key			    	AS;
         
         hive_script_execution_test{
          
          	simple_trigger              10 m;
-         	
-         	identity_server_host		10.100.4.57:9444;
-         	is_admin_username			admin;
-         	is_admin_password			admin;
-         	
-         	
-         	cassandra_host				localhost;
-         	cassandra_port				9160;
-         	cassandra_ks_name			EVENT_KS;
-         	cassandra_ks_username		admin;
-         	cassandra_ks_password		admin;
-         	
-      # atleast one test should be run on the server pointed by 
-      # this server key before executing this test   	
-         	server_key			    	AS;
          
+         }
+        
+        cassandra_past_logs_deletion_test{
+        
+        	simple_trigger              10 m;
+
          }
     }
 

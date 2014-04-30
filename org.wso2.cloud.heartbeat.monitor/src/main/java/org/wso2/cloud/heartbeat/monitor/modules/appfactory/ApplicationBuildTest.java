@@ -28,6 +28,8 @@ import org.wso2.cloud.heartbeat.monitor.core.clients.utils.JagApiProperties;
 import org.wso2.cloud.heartbeat.monitor.core.notification.Mailer;
 import org.wso2.cloud.heartbeat.monitor.core.notification.SMSSender;
 import org.wso2.cloud.heartbeat.monitor.modules.appfactory.entities.BuildInfo;
+import org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.FalseReturnException;
+import org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException;
 import org.wso2.cloud.heartbeat.monitor.utils.DbConnectionManager;
 import org.wso2.cloud.heartbeat.monitor.utils.fileutils.CaseConverter;
 
@@ -86,35 +88,84 @@ public class ApplicationBuildTest implements Job {
      * Initializes Web application service test
      */
     private void initWebAppTest() {
-        errorsReported = false;
-        hostName = "https://" + hostName;
-        authenticatorClient = new JaggeryAppAuthenticatorClient(hostName);
-        loginStatus = authenticatorClient.login(tenantUser,tenantUserPwd);
-        try {
-            lastBuildInfo = getBuildInfo();
-        } catch (Exception e) {
+
+	        try {
+	            errorsReported = false;
+	            hostName = "https://" + hostName;
+	            authenticatorClient = new JaggeryAppAuthenticatorClient(hostName);
+	            loginStatus = authenticatorClient.login(tenantUser,tenantUserPwd);
+	            if (!loginStatus) {
+	            	throw new JaggeryAppLoginException("Login failure to appmgt jaggery app. Returned false as a login status.");
+	            }
+	               lastBuildInfo = getBuildInfo();
+            } catch (JaggeryAppLoginException e) {
+        	        countNoOfRequests("LoginError", e, "initWebAppTest");
+            } catch (Exception e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+            } 
+        requestCount = 0;
+  
             log.error(completeTestName + "Login failure to appmgt jaggery app. Returned false as a login status.");
             onFailure("Tenant login failure to appmgt jaggery app.");
-        }
+        
     }
+    
+
+    /**
+     * Gets last build information of a application
+     * @return 
+     * @throws Exception 
+     */
+    private BuildInfo getBuildInfo() throws Exception{
+
+	        if(loginStatus){
+	            Map<String, String> params = new HashMap<String, String>();
+	            params.put("action", "getbuildandrepodata");
+	            params.put("applicationKey", applicationKey);
+	            params.put("buildable", "true");
+	            params.put("isRoleBasedPermissionAllowed", "false");
+	            params.put("metaDataNeed", "false");
+	            params.put("userName", tenantUser);
+	            String buildInfoUrl =   hostName + JagApiProperties.BUILD_INFO_URL_SFX;
+	            String result = HttpsJaggeryClient.httpPost(buildInfoUrl,params);
+
+	            JsonParser parser = new JsonParser();
+	            JsonArray resultAsJsonArray = parser.parse(result).getAsJsonArray();
+	            JsonObject resultAsJsonObject = resultAsJsonArray.get(0).getAsJsonObject();
+	            JsonObject buildJsonObject = resultAsJsonObject.get("build").getAsJsonObject();
+
+	            int lastBuildNo = buildJsonObject.get("lastBuildId").getAsInt();
+	            String lastBuildStatus = buildJsonObject.get("status").getAsString();
+	            return new BuildInfo(lastBuildNo,lastBuildStatus);
+	        } else {
+	            throw new Exception("Login failure to appmgt jaggery app. Returned false as a login status.");
+	        }
+    }
+
 
     /**
      * Triggers a build
      */
     private void triggerBuild() {
-        if(loginStatus){
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("action", "createArtifact");
-            params.put("applicationKey", applicationKey);
-            params.put("doDeploy", "true");
-            params.put("revision", "");
-            params.put("stage", "Development");
-            params.put("tagName", "");
-            params.put("version", "trunk");
-            String url =   hostName + JagApiProperties.BUILD_APPLICATION_URL_SFX ;
-            HttpsJaggeryClient.httpPost(url, params);
-        }else{
-            countNoOfRequests("LoginError");
+        try {
+	        if(loginStatus){
+	            Map<String, String> params = new HashMap<String, String>();
+	            params.put("action", "createArtifact");
+	            params.put("applicationKey", applicationKey);
+	            params.put("doDeploy", "true");
+	            params.put("revision", "");
+	            params.put("stage", "Development");
+	            params.put("tagName", "");
+	            params.put("version", "trunk");
+	            String url =   hostName + JagApiProperties.BUILD_APPLICATION_URL_SFX ;
+	            HttpsJaggeryClient.httpPost(url, params);
+	        }else{
+	        	throw new Exception("Login failure to appmgt jaggery app. Returned false as a login status.");
+	        }
+        } catch (Exception e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
         }
     }
 
@@ -126,7 +177,9 @@ public class ApplicationBuildTest implements Job {
         try {
             Thread.sleep(deploymentWaitTime);
             loginStatus = authenticatorClient.login(tenantUser,tenantUserPwd);
-            BuildInfo currentBuildInfo = getBuildInfo();
+            //get New Build Status
+            getBuildInfo();
+            BuildInfo currentBuildInfo = lastBuildInfo;
             if(currentBuildInfo.getBuildNo() == lastBuildInfo.getBuildNo()+1 && currentBuildInfo.getBuildStatus().equals("successful")){
                 authenticatorClient.logout();
                 onSuccess();
@@ -144,6 +197,76 @@ public class ApplicationBuildTest implements Job {
             onFailure("Tenant login failure to appmgt jaggery app.");
         }
     }
+    
+    private void countNoOfRequests(String type, Object obj, String method) {
+
+		requestCount++;
+		log.info("Retrying :" + method + " count: " + requestCount + " type: " + type);
+		if (requestCount == 3) {
+			System.out.println("3 times retried, handling error" + method);
+			handleError(type, obj, method);
+			requestCount = 0;
+		} else {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// Exception ignored
+			}
+
+			if (type.equals("LoginError")) {
+				
+				loginStatus = authenticatorClient.login(tenantUser,tenantUserPwd);
+				if (method.equals("initWebAppTest")) {
+					initWebAppTest();
+				} else if (method.equals("getBuildInfo")) {
+				} else if (method.equals("triggerBuild")) {
+					triggerBuild();
+				} else if (method.equals("testBuildStatus")) {
+					testBuildStatus();
+				}
+			}
+		}
+	}
+
+	private void handleError(String type, Object obj, String method) {
+		if (type.equals("JaggeryAppLoginException")) {
+			JaggeryAppLoginException jaggeryAppLoginException = (JaggeryAppLoginException) obj;
+			if (method.equals("initWebAppTest")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
+				          hostName, jaggeryAppLoginException);
+			} else if (method.equals("changePassword")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " +
+				          hostName, jaggeryAppLoginException);
+			} else if (method.equals("resetPasssword")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " +
+				          hostName, jaggeryAppLoginException);
+			}
+			onFailure(jaggeryAppLoginException.getMessage());
+		} else if (type.equals("FalseReturnException")) {
+			FalseReturnException falseReturnException = (FalseReturnException) obj;
+			if (method.equals("changePassword")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " +
+				          hostName, falseReturnException);
+			} else if (method.equals("resetPasssword")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " +
+				          hostName, falseReturnException);
+			}
+			onFailure(falseReturnException.getMessage());
+		} else if (type.equals("ExecutionException")) {
+			Exception exception = (Exception) obj;
+			if (method.equals("initWebAppTest")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
+				          hostName, exception);
+			} else if (method.equals("changePassword")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Change Password: " +
+				          hostName, exception);
+			} else if (method.equals("resetPasssword")) {
+				log.error(CaseConverter.splitCamelCase(serviceName) + " - Reset Password: " +
+				          hostName, exception);
+			}
+			onFailure(exception.getMessage());
+		}
+	}
 
     private void countNoOfRequests(String type) {
         requestCount++;
@@ -169,36 +292,6 @@ public class ApplicationBuildTest implements Job {
         } else if(type.equals("ResponseError")) {
             log.error(completeTestName + "Response doesn't contain required values.");
             onFailure("Response doesn't contain required values");
-        }
-    }
-
-    /**
-     * Gets last build information of a application
-     * @return BuildInfo Last Build Information
-     */
-    private BuildInfo getBuildInfo() throws Exception {
-
-        if(loginStatus){
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("action", "getbuildandrepodata");
-            params.put("applicationKey", applicationKey);
-            params.put("buildable", "true");
-            params.put("isRoleBasedPermissionAllowed", "false");
-            params.put("metaDataNeed", "false");
-            params.put("userName", tenantUser);
-            String buildInfoUrl =   hostName + JagApiProperties.BUILD_INFO_URL_SFX;
-            String result = HttpsJaggeryClient.httpPost(buildInfoUrl,params);
-
-            JsonParser parser = new JsonParser();
-            JsonArray resultAsJsonArray = parser.parse(result).getAsJsonArray();
-            JsonObject resultAsJsonObject = resultAsJsonArray.get(0).getAsJsonObject();
-            JsonObject buildJsonObject = resultAsJsonObject.get("build").getAsJsonObject();
-
-            int lastBuildNo = buildJsonObject.get("lastBuildId").getAsInt();
-            String lastBuildStatus = buildJsonObject.get("status").getAsString();
-            return new BuildInfo(lastBuildNo,lastBuildStatus);
-        } else {
-            throw new Exception("Login failure to appmgt jaggery app. Returned false as a login status.");
         }
     }
 

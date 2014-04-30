@@ -26,8 +26,8 @@ import org.wso2.cloud.heartbeat.monitor.core.clients.https.HttpsJaggeryClient;
 import org.wso2.cloud.heartbeat.monitor.core.clients.utils.JagApiProperties;
 import org.wso2.cloud.heartbeat.monitor.core.notification.Mailer;
 import org.wso2.cloud.heartbeat.monitor.core.notification.SMSSender;
-import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.exceptions.FalseReturnException;
-import org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.exceptions.JaggeryAppLoginException;
+import org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.FalseReturnException;
+import org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException;
 import org.wso2.cloud.heartbeat.monitor.utils.DbConnectionManager;
 import org.wso2.cloud.heartbeat.monitor.utils.ModuleUtils;
 import org.wso2.cloud.heartbeat.monitor.utils.fileutils.CaseConverter;
@@ -103,7 +103,8 @@ public class ImportUserMembersToTenantTest implements Job {
 			loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
 
 			if (!loginStatus) {
-				throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as login status");
+				throw new JaggeryAppLoginException(
+				                                   "Login failure to cloudmgt jaggery app. Returned false as login status");
 			}
 			isTenantAdmin = true;
 		} catch (JaggeryAppLoginException je) {
@@ -119,28 +120,29 @@ public class ImportUserMembersToTenantTest implements Job {
 	 */
 	private void addMemberToTenant() {
 		try {
-	        if (loginStatus) {
-	        	String url = hostName + JagApiProperties.ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX;
-	        	Map<String, String> params = new HashMap<String, String>();
-	        	params.put("action", "bulkImportUsers");
-	        	params.put("users", memberName);
-	        	params.put("defaultPassword", memberDefaultPassword);
-	        	String result = HttpsJaggeryClient.httpPost(url, params);
-	        	if (result.equals("false")) {
-	        		throw new FalseReturnException("Add Member to Tenant returned status as false");
-	        	} else if (result.equals("true")) {
-            		log.info(TEST_NAME+" : Import Member Success");
-            	}
-	        } else {
-	        	throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as login status");
-	        }
-        } catch (JaggeryAppLoginException je) {
-        	countNoOfRequests("JaggeryAppLoginException", je ,"addMemberToTenant");
-        } catch (FalseReturnException fe) {
-        	countNoOfRequests("FalseReturnException", fe ,"addMemberToTenant");
-        } catch (Exception ee) {
-        	countNoOfRequests("ExecutionException", ee ,"addMemberToTenant");
-        }
+			if (loginStatus) {
+				String url = hostName + JagApiProperties.ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX;
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("action", "bulkImportUsers");
+				params.put("users", memberName);
+				params.put("defaultPassword", memberDefaultPassword);
+				String result = HttpsJaggeryClient.httpPost(url, params);
+				if (result.equals("false")) {
+					throw new FalseReturnException("Add Member to Tenant returned status as false");
+				} else if (result.equals("true")) {
+					log.info(TEST_NAME + " : Import Member Success");
+				}
+			} else {
+				throw new JaggeryAppLoginException(
+				                                   "Login failure to cloudmgt jaggery app. Returned false as login status");
+			}
+		} catch (JaggeryAppLoginException je) {
+			countNoOfRequests("JaggeryAppLoginException", je, "addMemberToTenant");
+		} catch (FalseReturnException fe) {
+			countNoOfRequests("FalseReturnException", fe, "addMemberToTenant");
+		} catch (Exception ee) {
+			countNoOfRequests("ExecutionException", ee, "addMemberToTenant");
+		}
 		requestCount = 0;
 	}
 
@@ -150,29 +152,30 @@ public class ImportUserMembersToTenantTest implements Job {
 	private void updateMember() {
 
 		try {
-	        if (loginStatus) {
-	        	String url = hostName + JagApiProperties.ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX;
-	        	Map<String, String> params = new HashMap<String, String>();
-	        	params.put("action", "updateUserRoles");
-	        	params.put("rolesToAdd", "developer");
-	        	params.put("rolesToDelete", "");
-	        	params.put("userName", memberName);
-	        	String result = HttpsJaggeryClient.httpPost(url, params);
-	        	if (result.equals("false")) {
-	        		throw new FalseReturnException("Update Member returned status as false");
-	        	} else if (result.equals("true")) {
-	        		log.info(TEST_NAME+" : Update Member Success");
-	        	}
-	        } else {
-	        	throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as login status");
-	        }
-        } catch (JaggeryAppLoginException je) {
-        	countNoOfRequests("JaggeryAppLoginException", je ,"updateMember");
-        } catch (FalseReturnException fe) {
-        	countNoOfRequests("FalseReturnException", fe ,"updateMember");
-        } catch (Exception ee) {
-        	countNoOfRequests("ExecutionException", ee ,"updateMember");
-        }
+			if (loginStatus) {
+				String url = hostName + JagApiProperties.ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX;
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("action", "updateUserRoles");
+				params.put("rolesToAdd", "developer");
+				params.put("rolesToDelete", "");
+				params.put("userName", memberName);
+				String result = HttpsJaggeryClient.httpPost(url, params);
+				if (result.equals("false")) {
+					throw new FalseReturnException("Update Member returned status as false");
+				} else if (result.equals("true")) {
+					log.info(TEST_NAME + " : Update Member Success");
+				}
+			} else {
+				throw new JaggeryAppLoginException(
+				                                   "Login failure to cloudmgt jaggery app. Returned false as login status");
+			}
+		} catch (JaggeryAppLoginException je) {
+			countNoOfRequests("JaggeryAppLoginException", je, "updateMember");
+		} catch (FalseReturnException fe) {
+			countNoOfRequests("FalseReturnException", fe, "updateMember");
+		} catch (Exception ee) {
+			countNoOfRequests("ExecutionException", ee, "updateMember");
+		}
 		requestCount = 0;
 	}
 
@@ -181,21 +184,24 @@ public class ImportUserMembersToTenantTest implements Job {
 	 */
 	private void loginWithMember() {
 		try {
-	        authenticatorClient.logout();
-	        loginStatus = false;
-	        isTenantAdmin = false;
-	        loginStatus = authenticatorClient.login(memberUserName, memberDefaultPassword);
-	        if (!loginStatus) {
-	        	throw new JaggeryAppLoginException("Imported Member Login Failure to cloudmgt jaggery app. Returned false as login status");
-	        }
-	        authenticatorClient.logout();
-        } catch (JaggeryAppLoginException je) {
-        	countNoOfRequests("JaggeryAppLoginException", je ,"loginWithMember");
-        } catch (Exception ee) {
-        	countNoOfRequests("ExecutionException", ee ,"loginWithMember");
-        }
+			authenticatorClient.logout();
+			loginStatus = false;
+			isTenantAdmin = false;
+			loginStatus = authenticatorClient.login(memberUserName, memberDefaultPassword);
+			if (!loginStatus) {
+				throw new JaggeryAppLoginException(
+				                                   "Imported Member Login Failure to cloudmgt jaggery app. Returned false as login status");
+			} else {
+				log.info(TEST_NAME + " : Login with Member Success");
+			}
+			authenticatorClient.logout();
+		} catch (JaggeryAppLoginException je) {
+			countNoOfRequests("JaggeryAppLoginException", je, "loginWithMember");
+		} catch (Exception ee) {
+			countNoOfRequests("ExecutionException", ee, "loginWithMember");
+		}
 	}
-	
+
 	/**
 	 * Delete Imported Member from tenant
 	 * Before doing this tenant needs to be relogged to jaggery app
@@ -203,39 +209,43 @@ public class ImportUserMembersToTenantTest implements Job {
 
 	private void deleteMember() {
 		try {
-	        loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
-	        isTenantAdmin = true;
-	        if (loginStatus) {
-	        	String url = hostName + JagApiProperties.ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX;
-	        	Map<String, String> params = new HashMap<String, String>();
-	        	params.put("action", "deleteUserFromTenant");
-	        	params.put("userName", memberName);
-	        	String result = HttpsJaggeryClient.httpPost(url, params);
-	        	if (result.equals("true")) {
-	        		log.info(TEST_NAME+" : Delete Member Success");
-	        		onSuccess();
-	        	} else if (result.equals("false")) {
-	        		throw new FalseReturnException("Delete Member returned status as false");
-	        	}
-	        } else {
-	        	throw new JaggeryAppLoginException("Login failure to cloudmgt jaggery app. Returned false as login status");
-	        }
-        } catch (JaggeryAppLoginException je) {
-        	countNoOfRequests("JaggeryAppLoginException", je ,"deleteMember");
-        } catch (FalseReturnException fe) {
-        	countNoOfRequests("FalseReturnException", fe ,"deleteMember");
-        } catch (Exception ee) {
-        	countNoOfRequests("ExecutionException", ee ,"deleteMember");
-        }
+			loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
+			isTenantAdmin = true;
+			if (loginStatus) {
+				String url = hostName + JagApiProperties.ADD_USER_TO_CLOUDMGT_TENANT_URL_SFX;
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("action", "deleteUserFromTenant");
+				params.put("userName", memberName);
+				String result = HttpsJaggeryClient.httpPost(url, params);
+				if (result.equals("true")) {
+					log.info(TEST_NAME + " : Delete Member Success");
+					onSuccess();
+				} else if (result.equals("false")) {
+					throw new FalseReturnException("Delete Member returned status as false");
+				}
+			} else {
+				throw new JaggeryAppLoginException(
+				                                   "Login failure to cloudmgt jaggery app. Returned false as login status");
+			}
+		} catch (JaggeryAppLoginException je) {
+			countNoOfRequests("JaggeryAppLoginException", je, "deleteMember");
+		} catch (FalseReturnException fe) {
+			countNoOfRequests("FalseReturnException", fe, "deleteMember");
+		} catch (Exception ee) {
+			countNoOfRequests("ExecutionException", ee, "deleteMember");
+		}
 		requestCount = 0;
 	}
-	
+
 	/**
 	 * Retries the Methods if errors occur
 	 * 
-	 * @param type Exception type
-	 * @param obj  Exception object
-	 * @param method Method Name
+	 * @param type
+	 *            Exception type
+	 * @param obj
+	 *            Exception object
+	 * @param method
+	 *            Method Name
 	 */
 
 	private void countNoOfRequests(String type, Object obj, String method) {
@@ -254,105 +264,66 @@ public class ImportUserMembersToTenantTest implements Job {
 			}
 
 			if (type.equals("JaggeryAppLoginException")) {
-				if (method.equals("initWebAppTest")) {
-					initWebAppTest();
-				} else if (method.equals("addMemberToTenant")) {
-					addMemberToTenant();
-				} else if (method.equals("updateMember")) {
-					updateMember();
-				} else if (method.equals("loginWithMember")) {
-					loginWithMember();
-				} else if (method.equals("deleteMember")) {
-					deleteMember();
-				}
+
+				loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
 			} else if (type.equals("FalseReturnException")) {
 
-				if (method.equals("addMemberToTenant")) {
-					addMemberToTenant();
-				} else if (method.equals("updateMember")) {
-					updateMember();
-				} else if (method.equals("deleteMember")) {
-					deleteMember();
-				}
-			} else if (type.equals("ExecutionException")) {
-				if (method.equals("initWebAppTest")) {
-					initWebAppTest();
-				} else if (method.equals("addMemberToTenant")) {
-					addMemberToTenant();
-				} else if (method.equals("updateMember")) {
-					updateMember();
-				} else if (method.equals("loginWithMember")) {
-					loginWithMember();
-				} else if (method.equals("deleteMember")) {
-					deleteMember();
-				}
+				loginStatus = authenticatorClient.login(tenantUser, tenantUserPwd);
+			}			
+			if (method.equals("initWebAppTest")) {
+				initWebAppTest();
+			} else if (method.equals("addMemberToTenant")) {
+				addMemberToTenant();
+			} else if (method.equals("updateMember")) {
+				updateMember();
+			} else if (method.equals("loginWithMember")) {
+				loginWithMember();
+			} else if (method.equals("deleteMember")) {
+				deleteMember();
 			}
-
 		}
 	}
-	
+
 	/**
 	 * Handles errors when retrying failed
 	 * 
-	 * @param type Exception type
-	 * @param obj  Exception object
-	 * @param method Method Name
+	 * @param type
+	 *            Exception type
+	 * @param obj
+	 *            Exception object
+	 * @param method
+	 *            Method Name
 	 */
 
 	private void handleError(String type, Object obj, String method) {
+		Exception exception = null;
 		if (type.equals("JaggeryAppLoginException")) {
-			JaggeryAppLoginException jaggeryAppLoginException = (JaggeryAppLoginException) obj;
-			if (method.equals("initWebAppTest")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
-				          hostName, jaggeryAppLoginException);
-			} else if (method.equals("addMemberToTenant")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Import Member: " +
-				          hostName, jaggeryAppLoginException);
-			} else if (method.equals("updateMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Update Member: " +
-				          hostName, jaggeryAppLoginException);
-			} else if (method.equals("loginWithMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Login with Member: " +
-				          hostName, jaggeryAppLoginException);
-			} else if (method.equals("deleteMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Delete Member: " +
-				          hostName, jaggeryAppLoginException);
-			}
-			onFailure(jaggeryAppLoginException.getMessage());
+			exception = (JaggeryAppLoginException) obj;
 		} else if (type.equals("FalseReturnException")) {
-			FalseReturnException falseReturnException = (FalseReturnException) obj;
-			if (method.equals("addMemberToTenant")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Import Member: " +
-				          hostName, falseReturnException);
-			} else if (method.equals("updateMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Update Member: " +
-				          hostName, falseReturnException);
-			} else if (method.equals("deleteMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Delete Member: " +
-				          hostName, falseReturnException);
-			}
-			onFailure(falseReturnException.getMessage());
+			exception = (FalseReturnException) obj;
 		} else if (type.equals("ExecutionException")) {
-			Exception exception = (Exception) obj;
-			if (method.equals("initWebAppTest")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
-				          hostName, exception);
-			} else if (method.equals("addMemberToTenant")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Import Member: " +
-				          hostName, exception);
-			} else if (method.equals("updateMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Update Member: " +
-				          hostName, exception);
-			} else if (method.equals("loginWithMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Login with Member: " +
-				          hostName, exception);
-			} else if (method.equals("deleteMember")) {
-				log.error(CaseConverter.splitCamelCase(serviceName) + " - Delete Member: " +
-				          hostName, exception);
-			}
-			onFailure(exception.getMessage());
+			 exception = (Exception) obj;
 		}
+		
+		if (method.equals("initWebAppTest")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Initiate Test: " +
+			          hostName, exception);
+		} else if (method.equals("addMemberToTenant")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Import Member: " +
+			          hostName, exception);
+		} else if (method.equals("updateMember")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Update Member: " +
+			          hostName, exception);
+		} else if (method.equals("loginWithMember")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Login with Member: " +
+			          hostName, exception);
+		} else if (method.equals("deleteMember")) {
+			log.error(CaseConverter.splitCamelCase(serviceName) + " - Delete Member: " +
+			          hostName, exception);
+		}
+		onFailure(exception.getMessage());
 	}
+
 	/**
 	 * On success
 	 */
@@ -374,8 +345,8 @@ public class ImportUserMembersToTenantTest implements Job {
 	 *            fault message
 	 */
 	private void onFailure(String msg) {
-		log.error(completeTestName + "FAILURE  - " +msg);
-		
+		log.error(completeTestName + "FAILURE  - " + msg);
+
 		if (!errorsReported) {
 			boolean success = false;
 			DbConnectionManager dbConnectionManager = DbConnectionManager.getInstance();

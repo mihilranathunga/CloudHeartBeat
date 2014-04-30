@@ -1,0 +1,685 @@
+[2014-04-30 11:05:10,373]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:05:12,896]  INFO -  Retrying :initWebAppTest count: 1 type: JaggeryAppLoginException
+[2014-04-30 11:05:17,214]  INFO -  Retrying :initWebAppTest count: 2 type: JaggeryAppLoginException
+[2014-04-30 11:05:20,224]  INFO -  Retrying :initWebAppTest count: 3 type: JaggeryAppLoginException
+[2014-04-30 11:05:20,226] ERROR -  Cloud Management - Initiate Test: https://https://https://cloudmgt.cloudpreview.wso2.com
+org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException: Login failure to cloudmgt jaggery app. Returned false as login status.
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:99)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.countNoOfRequests(ChangePassswordTest.java:204)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:104)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.countNoOfRequests(ChangePassswordTest.java:204)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:104)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.execute(ChangePassswordTest.java:76)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+[2014-04-30 11:05:20,228] ERROR -  Cloud Management - Change Passsword Test : FAILURE  - Login failure to cloudmgt jaggery app. Returned false as login status.
+[2014-04-30 11:05:21,003]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:05:21,040]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 11:05:21,058] ERROR -  Appfactory - Application Build Test : Login failure to appmgt jaggery app. Returned false as a login status.
+[2014-04-30 11:05:21,153]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:05:21,154]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 11:05:48,427] ERROR -  Cloud Management - Tenant Login: cloudmgt.cloudpreview.wso2.com: RemoteException thrown while login from Heartbeat tenant : 
+org.apache.axis2.AxisFault: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at org.apache.axis2.AxisFault.makeFault(AxisFault.java:430)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:78)
+	at org.apache.axis2.transport.http.AxisRequestEntity.writeRequest(AxisRequestEntity.java:84)
+	at org.apache.commons.httpclient.methods.EntityEnclosingMethod.writeRequestBody(EntityEnclosingMethod.java:499)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2114)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:622)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:451)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:278)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:442)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:398)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:224)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:149)
+	at org.wso2.carbon.authenticator.stub.AuthenticationAdminStub.login(AuthenticationAdminStub.java:659)
+	at org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient.checkLogin(CarbonAuthenticatorClient.java:109)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:77)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.execute(TenantLoginTest.java:60)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: com.ctc.wstx.exc.WstxIOException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1692)
+	at com.ctc.wstx.sw.BaseStreamWriter.close(BaseStreamWriter.java:288)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.close(XMLStreamWriterWrapper.java:46)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.close(MTOMXMLStreamWriter.java:188)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:197)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:74)
+	... 26 more
+Caused by: javax.net.ssl.SSLException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.SSLSocketImpl.checkEOF(SSLSocketImpl.java:1476)
+	at sun.security.ssl.SSLSocketImpl.checkWrite(SSLSocketImpl.java:1488)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:70)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BufferingXmlWriter.close(BufferingXmlWriter.java:194)
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1690)
+	... 31 more
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1884)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:276)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1341)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:868)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:804)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1016)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1312)
+	at sun.security.ssl.SSLSocketImpl.writeRecord(SSLSocketImpl.java:702)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:122)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BaseStreamWriter.flush(BaseStreamWriter.java:311)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.flush(XMLStreamWriterWrapper.java:50)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.flush(MTOMXMLStreamWriter.java:198)
+	at org.apache.axis2.databinding.ADBDataSource.serialize(ADBDataSource.java:91)
+	at org.apache.axiom.om.impl.llom.OMSourcedElementImpl.internalSerialize(OMSourcedElementImpl.java:691)
+	at org.apache.axiom.om.impl.util.OMSerializerUtil.serializeChildren(OMSerializerUtil.java:562)
+	at org.apache.axiom.om.impl.llom.OMElementImpl.internalSerialize(OMElementImpl.java:875)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.serializeInternally(SOAPEnvelopeImpl.java:283)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.internalSerialize(SOAPEnvelopeImpl.java:245)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:193)
+	... 27 more
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:385)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:292)
+	at sun.security.validator.Validator.validate(Validator.java:260)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:326)
+	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:126)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1323)
+	... 49 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:196)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:268)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:380)
+	... 55 more
+[2014-04-30 11:05:48,566]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:05:48,567]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 11:06:07,947] ERROR -  Appfactory - Tenant Login: appfactory.cloudpreview.wso2.com: RemoteException thrown while login from Heartbeat tenant : 
+org.apache.axis2.AxisFault: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at org.apache.axis2.AxisFault.makeFault(AxisFault.java:430)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:78)
+	at org.apache.axis2.transport.http.AxisRequestEntity.writeRequest(AxisRequestEntity.java:84)
+	at org.apache.commons.httpclient.methods.EntityEnclosingMethod.writeRequestBody(EntityEnclosingMethod.java:499)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2114)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:622)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:451)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:278)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:442)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:398)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:224)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:149)
+	at org.wso2.carbon.authenticator.stub.AuthenticationAdminStub.login(AuthenticationAdminStub.java:659)
+	at org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient.checkLogin(CarbonAuthenticatorClient.java:109)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:77)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.execute(TenantLoginTest.java:60)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: com.ctc.wstx.exc.WstxIOException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1692)
+	at com.ctc.wstx.sw.BaseStreamWriter.close(BaseStreamWriter.java:288)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.close(XMLStreamWriterWrapper.java:46)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.close(MTOMXMLStreamWriter.java:188)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:197)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:74)
+	... 26 more
+Caused by: javax.net.ssl.SSLException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.SSLSocketImpl.checkEOF(SSLSocketImpl.java:1476)
+	at sun.security.ssl.SSLSocketImpl.checkWrite(SSLSocketImpl.java:1488)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:70)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BufferingXmlWriter.close(BufferingXmlWriter.java:194)
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1690)
+	... 31 more
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1884)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:276)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1341)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:868)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:804)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1016)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1312)
+	at sun.security.ssl.SSLSocketImpl.writeRecord(SSLSocketImpl.java:702)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:122)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BaseStreamWriter.flush(BaseStreamWriter.java:311)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.flush(XMLStreamWriterWrapper.java:50)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.flush(MTOMXMLStreamWriter.java:198)
+	at org.apache.axis2.databinding.ADBDataSource.serialize(ADBDataSource.java:91)
+	at org.apache.axiom.om.impl.llom.OMSourcedElementImpl.internalSerialize(OMSourcedElementImpl.java:691)
+	at org.apache.axiom.om.impl.util.OMSerializerUtil.serializeChildren(OMSerializerUtil.java:562)
+	at org.apache.axiom.om.impl.llom.OMElementImpl.internalSerialize(OMElementImpl.java:875)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.serializeInternally(SOAPEnvelopeImpl.java:283)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.internalSerialize(SOAPEnvelopeImpl.java:245)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:193)
+	... 27 more
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:385)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:292)
+	at sun.security.validator.Validator.validate(Validator.java:260)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:326)
+	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:126)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1323)
+	... 49 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:196)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:268)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:380)
+	... 55 more
+[2014-04-30 11:06:08,035]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:06:08,036]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 11:06:11,536]  INFO -  Retrying :initWebAppTest count: 1 type: JaggeryAppLoginException
+[2014-04-30 11:06:15,863]  INFO -  Retrying :initWebAppTest count: 2 type: JaggeryAppLoginException
+[2014-04-30 11:06:18,872]  INFO -  Retrying :initWebAppTest count: 3 type: JaggeryAppLoginException
+[2014-04-30 11:06:18,873] ERROR -  Cloud Management - Initiate Test: https://https://https://cloudmgt.cloudpreview.wso2.com
+org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException: Login failure to cloudmgt jaggery app. Returned false as login status
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:106)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.countNoOfRequests(ImportUserMembersToTenantTest.java:271)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:111)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.countNoOfRequests(ImportUserMembersToTenantTest.java:271)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:111)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.execute(ImportUserMembersToTenantTest.java:75)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+[2014-04-30 11:06:18,873] ERROR -  Cloud Management - Import User Members To Tenant Test : FAILURE  - Login failure to cloudmgt jaggery app. Returned false as login status
+[2014-04-30 11:06:18,996]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:06:18,997]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 11:06:22,541] ERROR -  Appfactory - Import Member Test : Failed to update the newly added member in tenant.
+[2014-04-30 11:06:22,664]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 11:06:22,665]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 12:05:12,427]  INFO -  Retrying :initWebAppTest count: 1 type: JaggeryAppLoginException
+[2014-04-30 12:05:17,343]  INFO -  Retrying :initWebAppTest count: 2 type: JaggeryAppLoginException
+[2014-04-30 12:05:20,351]  INFO -  Retrying :initWebAppTest count: 3 type: JaggeryAppLoginException
+[2014-04-30 12:05:20,352] ERROR -  Cloud Management - Initiate Test: https://https://https://cloudmgt.cloudpreview.wso2.com
+org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException: Login failure to cloudmgt jaggery app. Returned false as login status.
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:99)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.countNoOfRequests(ChangePassswordTest.java:204)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:104)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.countNoOfRequests(ChangePassswordTest.java:204)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:104)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.execute(ChangePassswordTest.java:76)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+[2014-04-30 12:05:20,353] ERROR -  Cloud Management - Change Passsword Test : FAILURE  - Login failure to cloudmgt jaggery app. Returned false as login status.
+[2014-04-30 12:05:21,193]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 12:05:21,194]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 12:05:22,271] ERROR -  Appfactory - Application Build Test : Login failure to appmgt jaggery app. Returned false as a login status.
+[2014-04-30 12:05:22,393]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 12:05:22,394]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 12:05:49,709] ERROR -  Cloud Management - Tenant Login: cloudmgt.cloudpreview.wso2.com: RemoteException thrown while login from Heartbeat tenant : 
+org.apache.axis2.AxisFault: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at org.apache.axis2.AxisFault.makeFault(AxisFault.java:430)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:78)
+	at org.apache.axis2.transport.http.AxisRequestEntity.writeRequest(AxisRequestEntity.java:84)
+	at org.apache.commons.httpclient.methods.EntityEnclosingMethod.writeRequestBody(EntityEnclosingMethod.java:499)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2114)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:622)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:451)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:278)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:442)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:398)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:224)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:149)
+	at org.wso2.carbon.authenticator.stub.AuthenticationAdminStub.login(AuthenticationAdminStub.java:659)
+	at org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient.checkLogin(CarbonAuthenticatorClient.java:109)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:77)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.execute(TenantLoginTest.java:60)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: com.ctc.wstx.exc.WstxIOException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1692)
+	at com.ctc.wstx.sw.BaseStreamWriter.close(BaseStreamWriter.java:288)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.close(XMLStreamWriterWrapper.java:46)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.close(MTOMXMLStreamWriter.java:188)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:197)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:74)
+	... 26 more
+Caused by: javax.net.ssl.SSLException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.SSLSocketImpl.checkEOF(SSLSocketImpl.java:1476)
+	at sun.security.ssl.SSLSocketImpl.checkWrite(SSLSocketImpl.java:1488)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:70)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BufferingXmlWriter.close(BufferingXmlWriter.java:194)
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1690)
+	... 31 more
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1884)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:276)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1341)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:868)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:804)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1016)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1312)
+	at sun.security.ssl.SSLSocketImpl.writeRecord(SSLSocketImpl.java:702)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:122)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BaseStreamWriter.flush(BaseStreamWriter.java:311)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.flush(XMLStreamWriterWrapper.java:50)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.flush(MTOMXMLStreamWriter.java:198)
+	at org.apache.axis2.databinding.ADBDataSource.serialize(ADBDataSource.java:91)
+	at org.apache.axiom.om.impl.llom.OMSourcedElementImpl.internalSerialize(OMSourcedElementImpl.java:691)
+	at org.apache.axiom.om.impl.util.OMSerializerUtil.serializeChildren(OMSerializerUtil.java:562)
+	at org.apache.axiom.om.impl.llom.OMElementImpl.internalSerialize(OMElementImpl.java:875)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.serializeInternally(SOAPEnvelopeImpl.java:283)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.internalSerialize(SOAPEnvelopeImpl.java:245)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:193)
+	... 27 more
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:385)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:292)
+	at sun.security.validator.Validator.validate(Validator.java:260)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:326)
+	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:126)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1323)
+	... 49 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:196)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:268)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:380)
+	... 55 more
+[2014-04-30 12:05:49,872]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 12:05:49,872]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 12:06:07,703] ERROR -  Appfactory - Tenant Login: appfactory.cloudpreview.wso2.com: RemoteException thrown while login from Heartbeat tenant : 
+org.apache.axis2.AxisFault: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at org.apache.axis2.AxisFault.makeFault(AxisFault.java:430)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:78)
+	at org.apache.axis2.transport.http.AxisRequestEntity.writeRequest(AxisRequestEntity.java:84)
+	at org.apache.commons.httpclient.methods.EntityEnclosingMethod.writeRequestBody(EntityEnclosingMethod.java:499)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2114)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:622)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:451)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:278)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:442)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:398)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:224)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:149)
+	at org.wso2.carbon.authenticator.stub.AuthenticationAdminStub.login(AuthenticationAdminStub.java:659)
+	at org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient.checkLogin(CarbonAuthenticatorClient.java:109)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:77)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.execute(TenantLoginTest.java:60)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: com.ctc.wstx.exc.WstxIOException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1692)
+	at com.ctc.wstx.sw.BaseStreamWriter.close(BaseStreamWriter.java:288)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.close(XMLStreamWriterWrapper.java:46)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.close(MTOMXMLStreamWriter.java:188)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:197)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:74)
+	... 26 more
+Caused by: javax.net.ssl.SSLException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.SSLSocketImpl.checkEOF(SSLSocketImpl.java:1476)
+	at sun.security.ssl.SSLSocketImpl.checkWrite(SSLSocketImpl.java:1488)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:70)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BufferingXmlWriter.close(BufferingXmlWriter.java:194)
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1690)
+	... 31 more
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1884)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:276)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1341)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:868)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:804)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1016)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1312)
+	at sun.security.ssl.SSLSocketImpl.writeRecord(SSLSocketImpl.java:702)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:122)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BaseStreamWriter.flush(BaseStreamWriter.java:311)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.flush(XMLStreamWriterWrapper.java:50)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.flush(MTOMXMLStreamWriter.java:198)
+	at org.apache.axis2.databinding.ADBDataSource.serialize(ADBDataSource.java:91)
+	at org.apache.axiom.om.impl.llom.OMSourcedElementImpl.internalSerialize(OMSourcedElementImpl.java:691)
+	at org.apache.axiom.om.impl.util.OMSerializerUtil.serializeChildren(OMSerializerUtil.java:562)
+	at org.apache.axiom.om.impl.llom.OMElementImpl.internalSerialize(OMElementImpl.java:875)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.serializeInternally(SOAPEnvelopeImpl.java:283)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.internalSerialize(SOAPEnvelopeImpl.java:245)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:193)
+	... 27 more
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:385)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:292)
+	at sun.security.validator.Validator.validate(Validator.java:260)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:326)
+	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:126)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1323)
+	... 49 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:196)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:268)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:380)
+	... 55 more
+[2014-04-30 12:06:07,790]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 12:06:07,791]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 12:06:11,890]  INFO -  Retrying :initWebAppTest count: 1 type: JaggeryAppLoginException
+[2014-04-30 12:06:18,528]  INFO -  Retrying :initWebAppTest count: 2 type: JaggeryAppLoginException
+[2014-04-30 12:06:21,539]  INFO -  Retrying :initWebAppTest count: 3 type: JaggeryAppLoginException
+[2014-04-30 12:06:21,540] ERROR -  Cloud Management - Initiate Test: https://https://https://cloudmgt.cloudpreview.wso2.com
+org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException: Login failure to cloudmgt jaggery app. Returned false as login status
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:106)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.countNoOfRequests(ImportUserMembersToTenantTest.java:271)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:111)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.countNoOfRequests(ImportUserMembersToTenantTest.java:271)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:111)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.execute(ImportUserMembersToTenantTest.java:75)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+[2014-04-30 12:06:21,541] ERROR -  Cloud Management - Import User Members To Tenant Test : FAILURE  - Login failure to cloudmgt jaggery app. Returned false as login status
+[2014-04-30 12:06:21,622]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 12:06:21,623]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 12:06:24,817] ERROR -  Appfactory - Import Member Test : Failed to update the newly added member in tenant.
+[2014-04-30 12:06:24,907]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 12:06:24,908]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 13:05:14,864]  INFO -  Retrying :initWebAppTest count: 1 type: JaggeryAppLoginException
+[2014-04-30 13:05:16,647] ERROR -  Appfactory - Application Build Test : Login failure to appmgt jaggery app. Returned false as a login status.
+[2014-04-30 13:05:16,791]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 13:05:16,799]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 13:05:29,193]  INFO -  Retrying :initWebAppTest count: 2 type: JaggeryAppLoginException
+[2014-04-30 13:05:32,200]  INFO -  Retrying :initWebAppTest count: 3 type: JaggeryAppLoginException
+[2014-04-30 13:05:32,200] ERROR -  Cloud Management - Initiate Test: https://https://https://cloudmgt.cloudpreview.wso2.com
+org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException: Login failure to cloudmgt jaggery app. Returned false as login status.
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:99)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.countNoOfRequests(ChangePassswordTest.java:204)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:104)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.countNoOfRequests(ChangePassswordTest.java:204)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.initWebAppTest(ChangePassswordTest.java:104)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ChangePassswordTest.execute(ChangePassswordTest.java:76)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+[2014-04-30 13:05:32,201] ERROR -  Cloud Management - Change Passsword Test : FAILURE  - Login failure to cloudmgt jaggery app. Returned false as login status.
+[2014-04-30 13:05:32,294]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 13:05:32,295]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 13:06:05,649] ERROR -  Cloud Management - Tenant Login: cloudmgt.cloudpreview.wso2.com: RemoteException thrown while login from Heartbeat tenant : 
+org.apache.axis2.AxisFault: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at org.apache.axis2.AxisFault.makeFault(AxisFault.java:430)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:78)
+	at org.apache.axis2.transport.http.AxisRequestEntity.writeRequest(AxisRequestEntity.java:84)
+	at org.apache.commons.httpclient.methods.EntityEnclosingMethod.writeRequestBody(EntityEnclosingMethod.java:499)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2114)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:622)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:451)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:278)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:442)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:398)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:224)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:149)
+	at org.wso2.carbon.authenticator.stub.AuthenticationAdminStub.login(AuthenticationAdminStub.java:659)
+	at org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient.checkLogin(CarbonAuthenticatorClient.java:109)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:77)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.execute(TenantLoginTest.java:60)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: com.ctc.wstx.exc.WstxIOException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1692)
+	at com.ctc.wstx.sw.BaseStreamWriter.close(BaseStreamWriter.java:288)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.close(XMLStreamWriterWrapper.java:46)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.close(MTOMXMLStreamWriter.java:188)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:197)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:74)
+	... 26 more
+Caused by: javax.net.ssl.SSLException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.SSLSocketImpl.checkEOF(SSLSocketImpl.java:1476)
+	at sun.security.ssl.SSLSocketImpl.checkWrite(SSLSocketImpl.java:1488)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:70)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BufferingXmlWriter.close(BufferingXmlWriter.java:194)
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1690)
+	... 31 more
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1884)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:276)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1341)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:868)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:804)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1016)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1312)
+	at sun.security.ssl.SSLSocketImpl.writeRecord(SSLSocketImpl.java:702)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:122)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BaseStreamWriter.flush(BaseStreamWriter.java:311)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.flush(XMLStreamWriterWrapper.java:50)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.flush(MTOMXMLStreamWriter.java:198)
+	at org.apache.axis2.databinding.ADBDataSource.serialize(ADBDataSource.java:91)
+	at org.apache.axiom.om.impl.llom.OMSourcedElementImpl.internalSerialize(OMSourcedElementImpl.java:691)
+	at org.apache.axiom.om.impl.util.OMSerializerUtil.serializeChildren(OMSerializerUtil.java:562)
+	at org.apache.axiom.om.impl.llom.OMElementImpl.internalSerialize(OMElementImpl.java:875)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.serializeInternally(SOAPEnvelopeImpl.java:283)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.internalSerialize(SOAPEnvelopeImpl.java:245)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:193)
+	... 27 more
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:385)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:292)
+	at sun.security.validator.Validator.validate(Validator.java:260)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:326)
+	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:126)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1323)
+	... 49 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:196)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:268)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:380)
+	... 55 more
+[2014-04-30 13:06:05,782]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 13:06:05,782]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 13:06:11,627]  INFO -  Retrying :initWebAppTest count: 1 type: JaggeryAppLoginException
+[2014-04-30 13:06:23,761] ERROR -  Appfactory - Tenant Login: appfactory.cloudpreview.wso2.com: RemoteException thrown while login from Heartbeat tenant : 
+org.apache.axis2.AxisFault: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at org.apache.axis2.AxisFault.makeFault(AxisFault.java:430)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:78)
+	at org.apache.axis2.transport.http.AxisRequestEntity.writeRequest(AxisRequestEntity.java:84)
+	at org.apache.commons.httpclient.methods.EntityEnclosingMethod.writeRequestBody(EntityEnclosingMethod.java:499)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2114)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.axis2.transport.http.AbstractHTTPSender.executeMethod(AbstractHTTPSender.java:622)
+	at org.apache.axis2.transport.http.HTTPSender.sendViaPost(HTTPSender.java:193)
+	at org.apache.axis2.transport.http.HTTPSender.send(HTTPSender.java:75)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.writeMessageWithCommons(CommonsHTTPTransportSender.java:451)
+	at org.apache.axis2.transport.http.CommonsHTTPTransportSender.invoke(CommonsHTTPTransportSender.java:278)
+	at org.apache.axis2.engine.AxisEngine.send(AxisEngine.java:442)
+	at org.apache.axis2.description.OutInAxisOperationClient.send(OutInAxisOperation.java:398)
+	at org.apache.axis2.description.OutInAxisOperationClient.executeImpl(OutInAxisOperation.java:224)
+	at org.apache.axis2.client.OperationClient.execute(OperationClient.java:149)
+	at org.wso2.carbon.authenticator.stub.AuthenticationAdminStub.login(AuthenticationAdminStub.java:659)
+	at org.wso2.cloud.heartbeat.monitor.core.clients.authentication.CarbonAuthenticatorClient.checkLogin(CarbonAuthenticatorClient.java:109)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:77)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.countNoOfLoginRequests(TenantLoginTest.java:105)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.login(TenantLoginTest.java:85)
+	at org.wso2.cloud.heartbeat.monitor.modules.common.tests.TenantLoginTest.execute(TenantLoginTest.java:60)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: com.ctc.wstx.exc.WstxIOException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1692)
+	at com.ctc.wstx.sw.BaseStreamWriter.close(BaseStreamWriter.java:288)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.close(XMLStreamWriterWrapper.java:46)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.close(MTOMXMLStreamWriter.java:188)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:197)
+	at org.apache.axis2.transport.http.SOAPMessageFormatter.writeTo(SOAPMessageFormatter.java:74)
+	... 26 more
+Caused by: javax.net.ssl.SSLException: Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.SSLSocketImpl.checkEOF(SSLSocketImpl.java:1476)
+	at sun.security.ssl.SSLSocketImpl.checkWrite(SSLSocketImpl.java:1488)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:70)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BufferingXmlWriter.close(BufferingXmlWriter.java:194)
+	at com.ctc.wstx.sw.BaseStreamWriter.finishDocument(BaseStreamWriter.java:1690)
+	... 31 more
+Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+	at sun.security.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1884)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:276)
+	at sun.security.ssl.Handshaker.fatalSE(Handshaker.java:270)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1341)
+	at sun.security.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:153)
+	at sun.security.ssl.Handshaker.processLoop(Handshaker.java:868)
+	at sun.security.ssl.Handshaker.process_record(Handshaker.java:804)
+	at sun.security.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:1016)
+	at sun.security.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1312)
+	at sun.security.ssl.SSLSocketImpl.writeRecord(SSLSocketImpl.java:702)
+	at sun.security.ssl.AppOutputStream.write(AppOutputStream.java:122)
+	at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+	at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+	at org.apache.commons.httpclient.ChunkedOutputStream.flush(ChunkedOutputStream.java:191)
+	at com.ctc.wstx.io.UTF8Writer.flush(UTF8Writer.java:99)
+	at com.ctc.wstx.sw.BufferingXmlWriter.flush(BufferingXmlWriter.java:214)
+	at com.ctc.wstx.sw.BaseStreamWriter.flush(BaseStreamWriter.java:311)
+	at org.apache.axiom.util.stax.wrapper.XMLStreamWriterWrapper.flush(XMLStreamWriterWrapper.java:50)
+	at org.apache.axiom.om.impl.MTOMXMLStreamWriter.flush(MTOMXMLStreamWriter.java:198)
+	at org.apache.axis2.databinding.ADBDataSource.serialize(ADBDataSource.java:91)
+	at org.apache.axiom.om.impl.llom.OMSourcedElementImpl.internalSerialize(OMSourcedElementImpl.java:691)
+	at org.apache.axiom.om.impl.util.OMSerializerUtil.serializeChildren(OMSerializerUtil.java:562)
+	at org.apache.axiom.om.impl.llom.OMElementImpl.internalSerialize(OMElementImpl.java:875)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.serializeInternally(SOAPEnvelopeImpl.java:283)
+	at org.apache.axiom.soap.impl.llom.SOAPEnvelopeImpl.internalSerialize(SOAPEnvelopeImpl.java:245)
+	at org.apache.axiom.om.impl.llom.OMSerializableImpl.serializeAndConsume(OMSerializableImpl.java:193)
+	... 27 more
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:385)
+	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:292)
+	at sun.security.validator.Validator.validate(Validator.java:260)
+	at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:326)
+	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231)
+	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:126)
+	at sun.security.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:1323)
+	... 49 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:196)
+	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:268)
+	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:380)
+	... 55 more
+[2014-04-30 13:06:23,885]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 13:06:23,885]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 13:06:27,325] ERROR -  Appfactory - Import Member Test : Failed to update the newly added member in tenant.
+[2014-04-30 13:06:27,460]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 13:06:27,461]  WARN -  SMS Notification: Notification SMS settings disabled
+[2014-04-30 13:06:30,625]  INFO -  Retrying :initWebAppTest count: 2 type: JaggeryAppLoginException
+[2014-04-30 13:06:33,632]  INFO -  Retrying :initWebAppTest count: 3 type: JaggeryAppLoginException
+[2014-04-30 13:06:33,632] ERROR -  Cloud Management - Initiate Test: https://https://https://cloudmgt.cloudpreview.wso2.com
+org.wso2.cloud.heartbeat.monitor.modules.common.exceptions.JaggeryAppLoginException: Login failure to cloudmgt jaggery app. Returned false as login status
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:106)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.countNoOfRequests(ImportUserMembersToTenantTest.java:271)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:111)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.countNoOfRequests(ImportUserMembersToTenantTest.java:271)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.initWebAppTest(ImportUserMembersToTenantTest.java:111)
+	at org.wso2.cloud.heartbeat.monitor.modules.cloudmgt.ImportUserMembersToTenantTest.execute(ImportUserMembersToTenantTest.java:75)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+[2014-04-30 13:06:33,633] ERROR -  Cloud Management - Import User Members To Tenant Test : FAILURE  - Login failure to cloudmgt jaggery app. Returned false as login status
+[2014-04-30 13:06:33,769]  WARN -  Mail Notification: Notification settings disabled
+[2014-04-30 13:06:33,770]  WARN -  SMS Notification: Notification SMS settings disabled

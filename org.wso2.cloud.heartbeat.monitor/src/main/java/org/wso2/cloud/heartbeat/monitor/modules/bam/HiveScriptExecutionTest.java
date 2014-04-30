@@ -157,8 +157,7 @@ public class HiveScriptExecutionTest implements Job {
 
 		try {
 			identityServerAuthenticatorClient = new CarbonAuthenticatorClient(identityServerHost);
-			isSessionCookie =
-			                  identityServerAuthenticatorClient.login(tenantUser, tenantUserPwd,
+			isSessionCookie = identityServerAuthenticatorClient.login(tenantUser, tenantUserPwd,
 			                                                          identityServerHost);
 
 			if (isSessionCookie.equals(null)) {
@@ -193,34 +192,20 @@ public class HiveScriptExecutionTest implements Job {
 			String curDate = format.format(cal.getTime());
 			cassandraCfName = "log_" + tenantID + "_" + serverKey + "_" + curDate;
 			log.info("Server Key: " + serverKey + " ,Column Family Name: " + cassandraCfName);
-			hiveQuery =
-			            "CREATE EXTERNAL TABLE IF NOT EXISTS LogEventInfo (" +
-			                    "key STRING, tenantID INT,serverName STRING, appName STRING, priority STRING,logTime DOUBLE,logger STRING,message STRING)" +
-			                    "STORED BY 'org.apache.hadoop.hive.cassandra.CassandraStorageHandler' " +
-			                    "WITH SERDEPROPERTIES (" +
-			                    "\"cassandra.host\" = \"" +
-			                    cassandraHost +
-			                    "\"," +
-			                    "\"cassandra.port\" = \"" +
-			                    cassandraPort +
-			                    "\",\"cassandra.ks.name\" = \"" +
-			                    cassandraKsName +
-			                    "\"," +
-			                    "\"cassandra.ks.username\" = \"" +
-			                    cassandraKsUsername +
-			                    "\"," +
-			                    "\"cassandra.ks.password\" = \"" +
-			                    cassandraKsPassword +
-			                    "\"," +
-			                    "\"cassandra.cf.name\" = \"" +
-			                    cassandraCfName +
-			                    "\"," +
-			                    "\"cassandra.columns.mapping\" = \":key,payload_tenantID,payload_serverName,payload_appName,payload_priority,payload_logTime,payload_logger,payload_message\");"
-
-			                    +
-			                    " SELECT key, tenantID, serverName, serverName, logTime , logger,  message FROM LogEventInfo;"
-
-			                    + "DROP TABLE IF EXISTS LogEventInfo;";
+			hiveQuery = 
+					"CREATE EXTERNAL TABLE IF NOT EXISTS LogEventInfo (" 
+						+ "key STRING, tenantID INT,serverName STRING, appName STRING, priority STRING,logTime DOUBLE,logger STRING,message STRING)" 
+					    + "STORED BY 'org.apache.hadoop.hive.cassandra.CassandraStorageHandler' " 
+						+ "WITH SERDEPROPERTIES (" 
+					    + "\"cassandra.host\" = \"" + cassandraHost + "\"," 
+						+ "\"cassandra.port\" = \"" + cassandraPort + "\","
+					    + "\"cassandra.ks.name\" = \"" + cassandraKsName +"\"," 
+					    + "\"cassandra.ks.username\" = \"" + cassandraKsUsername + "\"," 
+					    + "\"cassandra.ks.password\" = \"" + cassandraKsPassword + "\"," 
+					    + "\"cassandra.cf.name\" = \"" + cassandraCfName + "\"," 
+					    + "\"cassandra.columns.mapping\" = \":key,payload_tenantID,payload_serverName,payload_appName,payload_priority,payload_logTime,payload_logger,payload_message\");"
+					 + " SELECT key, tenantID, serverName, serverName, logTime , logger,  message FROM LogEventInfo;"
+					 + "DROP TABLE IF EXISTS LogEventInfo;";
 		} catch (Exception e) {
 			countNoOfRequests("TestSetupException", e, "initializeHiveExecutionTest");
 		}
